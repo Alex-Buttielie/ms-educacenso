@@ -1,0 +1,228 @@
+package br.com.educacenso.services.impl;
+
+import br.com.educacenso.app.docente.constraints.LocalizacaoZonaResidencia;
+import br.com.educacenso.app.docente.constraints.TipoEnsinoMedioCursado;
+import br.com.educacenso.app.docente.domains.AreaConhecimento;
+import br.com.educacenso.app.docente.domains.RecursoAlunoParaAvaliacaoInep;
+import br.com.educacenso.app.docente.repositorys.AreaConhecimentoRepository;
+import br.com.educacenso.app.docente.repositorys.AreaPosGraduacaoRepository;
+import br.com.educacenso.app.docente.repositorys.FormacaoComplementarPedagogicaProfessorRepository;
+import br.com.educacenso.app.docente.repositorys.OutrosCursosEspecificosRepository;
+import br.com.educacenso.app.docente.repositorys.PosGraduacaoConcluidaProfessorRepository;
+import br.com.educacenso.app.docente.repositorys.TipoDeficienciaEspectroAltasHabilidadesRepository;
+import br.com.educacenso.app.pessoa.constraints.MaiorNivelEscolaridadeConcluido;
+import br.com.educacenso.app.pessoa.constraints.Nacionalidade;
+import br.com.educacenso.app.pessoa.domains.Pessoa;
+import br.com.educacenso.app.pessoa.repositorys.PessoaRepository;
+import br.com.educacenso.app.unidadeEnsino.repositorys.RecursoAlunoParaAvaliacaoInepRepository;
+import br.com.educacenso.app.unidadeEnsino.repositorys.UnidadeEnsinoRepository;
+import br.com.educacenso.contraints.Paises;
+import br.com.educacenso.contraints.TipoRegistro;
+import br.com.educacenso.services.ExecutarImportacaoDocentesDadosPessoaisService;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Optional;
+
+import static java.lang.Boolean.TRUE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
+@RunWith(SpringRunner.class)
+@MockBeans({
+        @MockBean(UnidadeEnsinoRepository.class),
+        @MockBean(AreaConhecimentoRepository.class),
+        @MockBean(AreaPosGraduacaoRepository.class),
+        @MockBean(FormacaoComplementarPedagogicaProfessorRepository.class),
+        @MockBean(TipoDeficienciaEspectroAltasHabilidadesRepository.class),
+        @MockBean(OutrosCursosEspecificosRepository.class),
+        @MockBean(RecursoAlunoParaAvaliacaoInepRepository.class),
+        @MockBean(PosGraduacaoConcluidaProfessorRepository.class),
+        @MockBean(PessoaRepository.class)
+})
+public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
+
+    @TestConfiguration
+    static class Configuracao {
+        @Bean
+        public ExecutarImportacaoDocentesDadosPessoaisService executarImportacaoDocentesDadosPessoaisService() {
+            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl();
+        }
+    }
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
+    @Autowired
+    private AreaConhecimentoRepository areaConhecimentoRepository;
+    @Autowired
+    private ExecutarImportacaoDocentesDadosPessoaisService executarImportacaoDocentesDadosPessoaisService;
+    @Mock
+    private Pessoa pessoa;
+    @Mock
+    private AreaConhecimento areaConhecimento;
+    private final String[] DADOS_PESSOA_VAZIO_STR = {};
+
+    private final String[] NOVOS_DADOS_DOCENTE = {"30","52083535","3281","","78657369168","ANGELA MARIA TEIXEIRA MARTINS",
+            "20/08/1972","1","MARIA LIMA TEIXEIRA", "ANTONIO TOMAZ TEIXEIRA","2","3","2","724","5218508","0","","","","",
+            "","","","","","","","","","","","","","","","","","","","","76","","1","1","6","","","","","","","","","","",
+            "","","","","","","","","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"};
+
+    @Before
+    public void init() {
+        when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
+        when(areaConhecimentoRepository.findById(areaConhecimento.getCodigo())).thenReturn(Optional.of(areaConhecimento));
+    }
+
+    @Test
+    public void testAtualizarDadosPessoa() {
+        Pessoa pessoaAtualizada = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoa(NOVOS_DADOS_DOCENTE);
+
+        assertNotNull(pessoaAtualizada);
+        /** vai para o teste getDadosPessoaNaLinha**/
+        assertNotNull(pessoaAtualizada.getTipoRegistro());
+        assertEquals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO, pessoaAtualizada.getTipoRegistro());
+        assertEquals(Paises.ESPANHA.getValor(), pessoaAtualizada.getPaisNacionalidade().getValor());
+        assertEquals(Nacionalidade.BRASILEIRA_NASCIDO_EXTERIOR_OU_NATURALIZADO, pessoaAtualizada.getNacionalidade());
+
+    }
+
+    @Test
+    public void deveRastrearPessoaCacteristicasIndiv() {
+        final String[] dadosPessoaStr = {"", "", "", "", "00000000000", "TESTE RASTREAMENTO POR CARACTERISTICAS"};
+        final Pessoa dadosPessoa = new Pessoa().builder()
+                .nome("TESTE RASTREAMENTO POR CARACTERISTICAS")
+                .cpf("00000000000")
+                .build();
+
+        when(pessoaRepository.findPessoaByCpf(dadosPessoa.getCpf())).thenReturn(Optional.of(dadosPessoa));
+
+        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
+                .rastrearPessoaCacteristicasIndiv(dadosPessoaStr).orElse(null);
+
+        assertNotNull(pessoaRastreada);
+        assertEquals(pessoaRastreada.getNome(), dadosPessoa.getNome());
+        assertEquals(pessoaRastreada.getCpf(), dadosPessoa.getCpf());
+    }
+
+    @Test
+    public void deveRastrearPessoaCpf() {
+        final String[] dadosPessoaStr = {"", "", "", "", "00000000000", "TESTE RASTREAMENTO POR CPF"};
+        final Pessoa dadosPessoa = new Pessoa().builder()
+                .nome("TESTE RASTREAMENTO POR CPF")
+                .cpf("00000000000")
+                .build();
+
+        when(pessoaRepository.findPessoaByCpf(dadosPessoa.getCpf())).thenReturn(Optional.of(dadosPessoa));
+
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
+                .rastrearPessoaCpf(dadosPessoaStr);
+
+        assertEquals(pessoaRastreada.isPresent(), TRUE);
+
+    }
+
+    @Test
+    public void deveRastrearPessoaNome() {
+        final String[] dadosPessoaStr = {"", "", "", "", "00000000000", "TESTE RASTREAMENTO POR CPF"};
+        final Pessoa dadosPessoa = new Pessoa().builder()
+                .nome("TESTE RASTREAMENTO POR CPF")
+                .cpf("00000000000")
+                .build();
+
+        when(pessoaRepository.findPessoaByNome(dadosPessoa.getNome())).thenReturn(Optional.of(dadosPessoa));
+
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
+                .rastrearPessoaNome(dadosPessoaStr);
+
+        assertEquals(pessoaRastreada.isPresent(), TRUE);
+
+    }
+
+    @Test
+    public void deveAtualizarDadosPessoaConsultada() {
+        final String[] dadosPessoaStr = {"1"};
+        final Pessoa dadosPessoa = new Pessoa().builder().id(1l).build();
+
+        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaConsultada(Optional.of(dadosPessoa), dadosPessoaStr);
+
+        assertNotNull(pessoaConsulta);
+        assertNotNull(pessoaConsulta.getId());
+
+    }
+
+    @Test
+    public void deveAtualizarDadosPessoaNaoConsultada() {
+        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
+        assertNotNull(pessoaConsulta);
+
+    }
+
+    @Test
+    public void deveBuscarLocalizacaoZonaResidencia() {
+        final int POSICAO_CAMPO_LOCALIZACAO = 42;
+        LocalizacaoZonaResidencia localizacao = executarImportacaoDocentesDadosPessoaisService
+                .getLocalizacaoZonaResidencia(NOVOS_DADOS_DOCENTE[POSICAO_CAMPO_LOCALIZACAO]);
+        assertNotNull(localizacao);
+
+    }
+
+    @Test
+    public void naoDeveBuscarLocalizacaoZonaResidencia() {
+        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
+        assertNull(pessoaConsulta.getLocalizacaoZonaResidencia());
+
+    }
+
+    @Test
+    public void deveBuscarNacionalidadeCorreta() {
+        final String CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getCodigoEducacenso();
+        Nacionalidade nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
+        assertEquals(nacionalidade, Nacionalidade.BRASILEIRA);
+    }
+
+    @Test
+    public void deveBuscarMaiorNivelEscolaridadeConcluida() {
+        final String CODIGO_NIVEL = MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO.getDescricao();
+        MaiorNivelEscolaridadeConcluido nivel = executarImportacaoDocentesDadosPessoaisService.getMaiorNivelEscolaridadeConcluida(CODIGO_NIVEL);
+        assertEquals(nivel, MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO);
+    }
+
+    @Test
+    public void deveBuscarRecursoAlunoParaAvaliacaoInep() {
+        RecursoAlunoParaAvaliacaoInep recurso = RecursoAlunoParaAvaliacaoInep.builder().auxilioLedor(true).build();
+
+        Pessoa pessoaComId = Pessoa.builder()
+                .id(1l)
+                .recursoAlunoParaAvaliacaoInep(recurso)
+                .build();
+
+        Pessoa pessoaSemId = Pessoa.builder()
+                .recursoAlunoParaAvaliacaoInep(recurso)
+                .build();
+
+        assertEquals(pessoaSemId.getRecursoAlunoParaAvaliacaoInep(), recurso);
+        assertNull(pessoaSemId.getId());
+        assertEquals(pessoaComId.getRecursoAlunoParaAvaliacaoInep(), recurso);
+        assertNotNull(pessoaComId.getId());
+
+    }
+
+    @Test
+    public void deveBuscarTipoEnsinoMedioCursado() {
+        final String CODIGO_ENSINO_MEDIO_CURSADO = TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO.getCodigoEducacenso();
+        TipoEnsinoMedioCursado ensinoMedioCursado = executarImportacaoDocentesDadosPessoaisService.getTipoEnsinoMedioCursado(CODIGO_ENSINO_MEDIO_CURSADO);
+        assertEquals(ensinoMedioCursado, TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO);
+    }
+
+
+}
