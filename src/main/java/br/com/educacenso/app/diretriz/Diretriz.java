@@ -1,7 +1,7 @@
-package br.com.educacenso.app.unidadeEnsino.domains;
+package br.com.educacenso.app.diretriz;
 
-import br.com.educacenso.app.distrito.Distrito;
-import br.com.educacenso.app.municipio.Municipio;
+import br.com.educacenso.app.calendario.Calendario;
+import br.com.educacenso.serie.Serie;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,51 +13,38 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
-@Table(name = "endereco_unidade")
+@Table(name = "diretriz")
 @Getter
 @Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EnderecoUnidade {
+public class Diretriz implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Basic
-    @Column(name="cep")
-    private Integer cep;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "nome ")
+    private String nome;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn()
     @JsonFormat
-    private Municipio fkMun;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Calendario calendario;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn()
     @JsonFormat
-    private Distrito distrito;
-    @Basic
-    @Column(name="endereco")
-    private String  endereco;
-    @Basic
-    @Column(name="numero")
-    private String  numero;
-    @Basic
-    @Column(name="complemento")
-    private String  complemento;
-    @Basic
-    @Column(name="bairro")
-    private String  bairro;
-    @Basic
-    @Column(name="ddd")
-    private Integer ddd;
+    private Serie serie;
 
 }

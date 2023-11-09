@@ -22,7 +22,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OutrosCursosEspecificos  implements Serializable {
+public class OutrosCursosEspecificos implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

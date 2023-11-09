@@ -1,16 +1,10 @@
 package br.com.educacenso.app.pessoa.domains;
-
 import br.com.educacenso.app.docente.constraints.LocalizacaoDiferenciadaResidencia;
 import br.com.educacenso.app.docente.constraints.LocalizacaoZonaResidencia;
-import br.com.educacenso.app.docente.constraints.TipoEnsinoMedioCursado;
-import br.com.educacenso.app.docente.domains.FormacaoComplementarPedagogicaProfessor;
-import br.com.educacenso.app.docente.domains.OutrosCursosEspecificos;
-import br.com.educacenso.app.docente.domains.PosGraduacaoConcluidaProfessor;
 import br.com.educacenso.app.docente.domains.RecursoAlunoParaAvaliacaoInep;
 import br.com.educacenso.app.docente.domains.TipoDeficienciaEspectroAltasHabilidades;
 import br.com.educacenso.app.municipio.Municipio;
 import br.com.educacenso.app.pessoa.constraints.CorRaca;
-import br.com.educacenso.app.pessoa.constraints.MaiorNivelEscolaridadeConcluido;
 import br.com.educacenso.app.pessoa.constraints.Nacionalidade;
 import br.com.educacenso.app.pessoa.constraints.Sexo;
 import br.com.educacenso.app.pessoa.constraints.TipoFiliacao;
@@ -45,7 +39,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Pessoa  implements Serializable {
+public class Pessoa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -104,15 +98,6 @@ public class Pessoa  implements Serializable {
     @Column(name = "localizacao_diferenciada_residencia")
     private LocalizacaoDiferenciadaResidencia localizacaoDiferenciadaResidencia;
     @Basic
-    @Column(name = "maior_nivel_escolaridade_concluido")
-    private MaiorNivelEscolaridadeConcluido maiorNivelEscolaridadeConcluido;
-    @Basic
-    @Column(name = "nao_tem_pos_graduacao_concluida")
-    private Boolean naoTemPosGraduacaoConcluida;
-    @Basic
-    @Column(name = "tipo_ensino_medio_cursado")
-    private TipoEnsinoMedioCursado tipoEnsinoMedioCursado;
-    @Basic
     @Column(name = "endereco_eletronico_email")
     private String enderecoEletronicoEmail;
     @OneToOne()
@@ -123,18 +108,6 @@ public class Pessoa  implements Serializable {
     @JoinColumn()
     @JsonFormat
     private Municipio fkMunNasc;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    @JsonFormat
-    private FormacaoComplementarPedagogicaProfessor formacaoComplementarPedagogicaProfessor;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    @JsonFormat
-    private PosGraduacaoConcluidaProfessor posGraduacaoConcluidaProfessor;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    @JsonFormat
-    private OutrosCursosEspecificos outrosCursosEspecificos;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn()
     @JsonFormat
