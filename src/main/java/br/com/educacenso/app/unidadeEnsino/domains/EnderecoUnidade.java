@@ -1,6 +1,6 @@
 package br.com.educacenso.app.unidadeEnsino.domains;
 
-import br.com.educacenso.app.docente.distrito.Distrito;
+import br.com.educacenso.app.distrito.Distrito;
 import br.com.educacenso.app.municipio.Municipio;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

@@ -23,7 +23,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RecursoAlunoParaAvaliacaoInep  implements Serializable {
+public class RecursoAlunoParaAvaliacaoInep implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

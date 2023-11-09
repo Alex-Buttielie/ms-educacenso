@@ -7,7 +7,7 @@ import br.com.educacenso.app.docente.repositorys.OutrosCursosEspecificosReposito
 import br.com.educacenso.app.docente.repositorys.PosGraduacaoConcluidaProfessorRepository;
 import br.com.educacenso.app.docente.repositorys.TipoDeficienciaEspectroAltasHabilidadesRepository;
 import br.com.educacenso.app.pessoa.repositorys.PessoaRepository;
-import br.com.educacenso.app.turma.domains.ExecutarImportacaoTurmasServiceImpl;
+import br.com.educacenso.services.impl.ExecutarImportacaoTurmasServiceImpl;
 import br.com.educacenso.app.turma.repositorys.TurmaRepository;
 import br.com.educacenso.app.unidadeEnsino.repositorys.AbastecimentoAguaRespository;
 import br.com.educacenso.app.unidadeEnsino.repositorys.AcessoInternetRepository;

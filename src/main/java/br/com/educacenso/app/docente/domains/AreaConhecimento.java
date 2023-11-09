@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Table(name = "area_conhecimento")
 @Getter
 @Setter
