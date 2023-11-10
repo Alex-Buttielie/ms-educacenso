@@ -1,8 +1,8 @@
 package br.com.educacenso.services.impl;
 
-import br.com.educacenso.app.turma.domains.Turma;
-import br.com.educacenso.app.turma.repositorys.TurmaRepository;
-import br.com.educacenso.app.unidadeEnsino.repositorys.UnidadeEnsinoRepository;
+import br.com.educacenso.app.domains.Turma;
+import br.com.educacenso.repositories.TurmaRepository;
+import br.com.educacenso.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.architecture.GenericEducation;
 import br.com.educacenso.services.ExecutarImportacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
