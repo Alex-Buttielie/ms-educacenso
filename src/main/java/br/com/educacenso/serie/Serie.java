@@ -1,6 +1,6 @@
 package br.com.educacenso.serie;
 
-import br.com.educacenso.app.composicaoEnsino.ComposicaoEnsino;
+import br.com.educacenso.app.domains.ComposicaoEnsino;
 import br.com.educacenso.contraints.TipoReprovacao;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

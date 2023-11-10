@@ -1,8 +1,8 @@
 package br.com.educacenso.services.impl;
 
 import br.com.educacenso.services.ExecutarImportacaoUnidadesEnsinoIdentificacaoService;
-import br.com.educacenso.app.unidadeEnsino.domains.UnidadeEnsino;
-import br.com.educacenso.app.unidadeEnsino.repositorys.UnidadeEnsinoRepository;
+import br.com.educacenso.app.domains.UnidadeEnsino;
+import br.com.educacenso.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.architecture.GenericEducation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,23 +1,26 @@
 package br.com.educacenso.services.impl;
 
-import br.com.educacenso.app.docente.constraints.LocalizacaoZonaResidencia;
-import br.com.educacenso.app.docente.constraints.TipoEnsinoMedioCursado;
-import br.com.educacenso.app.docente.domains.AreaConhecimento;
-import br.com.educacenso.app.docente.domains.RecursoAlunoParaAvaliacaoInep;
-import br.com.educacenso.app.docente.repositorys.AreaConhecimentoRepository;
-import br.com.educacenso.app.docente.repositorys.AreaPosGraduacaoRepository;
-import br.com.educacenso.app.docente.repositorys.FormacaoComplementarPedagogicaProfessorRepository;
-import br.com.educacenso.app.docente.repositorys.OutrosCursosEspecificosRepository;
-import br.com.educacenso.app.docente.repositorys.PosGraduacaoConcluidaProfessorRepository;
-import br.com.educacenso.app.docente.repositorys.TipoDeficienciaEspectroAltasHabilidadesRepository;
-import br.com.educacenso.app.pessoa.constraints.MaiorNivelEscolaridadeConcluido;
-import br.com.educacenso.app.pessoa.constraints.Nacionalidade;
-import br.com.educacenso.app.pessoa.domains.Pessoa;
-import br.com.educacenso.app.pessoa.repositorys.PessoaRepository;
-import br.com.educacenso.app.unidadeEnsino.repositorys.RecursoAlunoParaAvaliacaoInepRepository;
-import br.com.educacenso.app.unidadeEnsino.repositorys.UnidadeEnsinoRepository;
+import br.com.educacenso.app.constraints.LocalizacaoDiferenciadaResidencia;
+import br.com.educacenso.app.constraints.LocalizacaoZonaResidencia;
+import br.com.educacenso.app.constraints.MaiorNivelEscolaridadeConcluido;
+import br.com.educacenso.app.constraints.Nacionalidade;
+import br.com.educacenso.app.constraints.TipoEnsinoMedioCursado;
+import br.com.educacenso.app.constraints.TipoFiliacao;
+import br.com.educacenso.app.domains.AreaConhecimento;
+import br.com.educacenso.app.domains.Pessoa;
+import br.com.educacenso.app.domains.RecursoAlunoParaAvaliacaoInep;
+import br.com.educacenso.app.domains.TipoDeficienciaEspectroAltasHabilidades;
 import br.com.educacenso.contraints.Paises;
 import br.com.educacenso.contraints.TipoRegistro;
+import br.com.educacenso.repositories.AreaConhecimentoRepository;
+import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
+import br.com.educacenso.repositories.FormacaoComplementarPedagogicaProfessorRepository;
+import br.com.educacenso.repositories.OutrosCursosEspecificosRepository;
+import br.com.educacenso.repositories.PessoaRepository;
+import br.com.educacenso.repositories.PosGraduacaoConcluidaProfessorRepository;
+import br.com.educacenso.repositories.RecursoAlunoParaAvaliacaoInepRepository;
+import br.com.educacenso.repositories.TipoDeficienciaEspectroAltasHabilidadesRepository;
+import br.com.educacenso.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.services.ExecutarImportacaoDocentesDadosPessoaisService;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +39,7 @@ import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -83,8 +87,13 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         when(areaConhecimentoRepository.findById(areaConhecimento.getCodigo())).thenReturn(Optional.of(areaConhecimento));
     }
 
+
+    public void naoDeveTestarImportarLinha(){
+        assertThrows(Exception.class, ()-> executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(null));
+    }
+
     @Test
-    public void testAtualizarDadosPessoa() {
+    public void deveAtualizarDadosPessoa() {
         Pessoa pessoaAtualizada = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoa(NOVOS_DADOS_DOCENTE);
 
         assertNotNull(pessoaAtualizada);
@@ -184,6 +193,14 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
     }
 
     @Test
+    public void deveBuscarLocalizacaoDiferenciadaResidencia() {
+        final int POSICAO_CAMPO_LOCALIZACAO = 42;
+        LocalizacaoDiferenciadaResidencia localizacao = executarImportacaoDocentesDadosPessoaisService
+                .getLocalizacaoDiferenciadaResidencia(NOVOS_DADOS_DOCENTE[POSICAO_CAMPO_LOCALIZACAO]);
+        assertNotNull(localizacao);
+    }
+
+    @Test
     public void deveBuscarNacionalidadeCorreta() {
         final String CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getCodigoEducacenso();
         Nacionalidade nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
@@ -224,5 +241,23 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         assertEquals(ensinoMedioCursado, TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO);
     }
 
+    @Test
+    public void deveBuscarTipoFiliacao() {
+        TipoFiliacao tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(NOVOS_DADOS_DOCENTE[7]);
+        assertEquals(tipoFiliacao, TipoFiliacao.FILIACAO_1_OU_2);
+    }
+
+    @Test
+    public void naoDeveBuscarTipoDeficienciaEspectroAltasHabilidades() {
+        TipoDeficienciaEspectroAltasHabilidades tipoDeficienciaEspectroAltasHabilidades = executarImportacaoDocentesDadosPessoaisService.getTipoDeficienciaEspectroAltasHabilidades(NOVOS_DADOS_DOCENTE, Optional.ofNullable(pessoa));
+        assertNotNull(tipoDeficienciaEspectroAltasHabilidades);
+    }
+
+    @Test
+    public void deveBuscarDadosPessoaNaLinha() {
+        Pessoa pessoaConsultada =
+                executarImportacaoDocentesDadosPessoaisService.getDadosPessoaNaLinha(NOVOS_DADOS_DOCENTE, Optional.ofNullable(pessoa));
+        assertNotNull(pessoaConsultada);
+    }
 
 }
