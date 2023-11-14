@@ -47,9 +47,6 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
         implements ExecutarImportacaoDocentesDadosPessoaisService {
 
     protected ProfessorRepository repository;
-
-    protected UnidadeEnsinoRepository unidadeEnsinoRepository;
-
     protected AreaConhecimentoRepository areaConhecimentoRepository;
 
     protected AreaPosGraduacaoRepository areaPosGraduacaoRepository;
@@ -62,7 +59,6 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
     protected RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository;
     protected PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository;
-    protected PessoaRepository pessoaRepository;
 
     @Autowired
     public ExecutarImportacaoDocentesDadosPessoaisServiceImpl(PessoaRepository pessoaRepository,
@@ -88,11 +84,11 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     }
 
     @Override
-    public void importarLinhaArquivo(String[] conteudoLinha) {
+    public Optional<Professor> importarLinhaArquivo(String[] conteudoLinha) {
         Pessoa pessoa = salvarPessoa(atualizarDadosPessoa(conteudoLinha));
         Professor professor = atualizarDadosProfessor(conteudoLinha, pessoa);
         salvarPessoa(atualizarDadosPessoa(conteudoLinha));
-        repository.save(professor);
+        return Optional.of(repository.save(professor));
     }
 
     public Professor atualizarDadosProfessor(String[] conteudoLinha, Pessoa pessoa) {
@@ -117,7 +113,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     private Professor getDadosProfessorNaLinha(String[] conteudoLinha,
                                                Optional<Professor> professor,
                                                Pessoa pessoa) {
-        return new Professor()
+        return  Professor
                 .builder()
                 .id(professor.map(Professor::getId).orElse(null))
                 .pessoa(pessoa)
@@ -147,7 +143,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                     .stream()
                     .findAny();
 
-            return new RecursoAlunoParaAvaliacaoInep()
+            return  RecursoAlunoParaAvaliacaoInep
                     .builder()
                     .id(recursoAlunoParaAvaliacaoInep.map(RecursoAlunoParaAvaliacaoInep::getId).orElse(null))
                     .auxilioLedor(stringToBoolean(conteudoLinha, 26))
@@ -182,7 +178,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                     .stream()
                     .findAny();
 
-            return new PosGraduacaoConcluidaProfessor()
+            return  PosGraduacaoConcluidaProfessor
                     .builder()
                     .id(posGraduacaoConcluidaProfessorOptional.map(PosGraduacaoConcluidaProfessor::getId).orElse(null))
                     .tipoPosGraducacao1(getTipoPosGraduacao(conteudoLinha, 58))
@@ -240,7 +236,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                     .stream()
                     .findAny();
 
-            return new OutrosCursosEspecificos()
+            return  OutrosCursosEspecificos
                     .builder()
                     .id(outrosCursosEspecificosOptional.map(OutrosCursosEspecificos::getId).orElse(null))
                     .anosFinaisEnsinoFundamental(stringToBoolean(conteudoLinha, 80))
@@ -268,15 +264,15 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     }
 
     public FormacaoComplementarPedagogicaProfessor getFormacoesComplementarPedagogicaProfessor(String[] conteudoLinha,
-                                                                                               Optional<Professor> ProfessorConsultadoOptional) {
+                                                                                               Optional<Professor> professorConsultadoOptional) {
         try {
-            Optional<FormacaoComplementarPedagogicaProfessor> formacaoComplementarPedagogicaProfessorOptional = ProfessorConsultadoOptional
+            Optional<FormacaoComplementarPedagogicaProfessor> formacaoComplementarPedagogicaProfessorOptional = professorConsultadoOptional
                     .map(Professor::getFormacaoComplementarPedagogicaProfessor)
                     .filter(Objects::nonNull)
                     .stream()
                     .findAny();
 
-            return new FormacaoComplementarPedagogicaProfessor()
+            return  FormacaoComplementarPedagogicaProfessor
                     .builder()
                     .id(formacaoComplementarPedagogicaProfessorOptional.map(FormacaoComplementarPedagogicaProfessor::getId).orElse(null))
                     .areaConhecimentoComponentesCurriculares1(getAreaConhecimentoCurricular(conteudoLinha, 55))
@@ -298,7 +294,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                     .stream()
                     .findAny();
 
-            return new TipoDeficienciaEspectroAltasHabilidades()
+            return  TipoDeficienciaEspectroAltasHabilidades
                     .builder()
                     .id(tipoDeficienciaEspectroAltasHabilidadesOptional.map(TipoDeficienciaEspectroAltasHabilidades::getId).orElse(null))
                     .altasHabilidadesSuperdotacao(stringToBoolean(conteudoLinha, 25))

@@ -122,7 +122,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public Pessoa getDadosPessoaNaLinha(String[] conteudoLinha, Optional<Pessoa> pessoaConsultadaOptional) {
-        return new Pessoa()
+        return  Pessoa
                 .builder()
                 .id(pessoaConsultadaOptional.map(Pessoa::getId).orElse(null))
                 .fkUni(unidadeEnsinoRepository.findById(52104346l).orElse(null))

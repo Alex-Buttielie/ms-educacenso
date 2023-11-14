@@ -32,8 +32,8 @@ public class ExecutarImportacaoTurmasServiceImpl
     }
 
     @Override
-    public void importarLinhaArquivo(String[] conteudoLinha) {
-        salvarDadosTurma(atualizarDadosTurma(conteudoLinha));
+    public Optional<Turma> importarLinhaArquivo(String[] conteudoLinha) {
+        return Optional.of(salvarDadosTurma(atualizarDadosTurma(conteudoLinha)));
     }
 
     private Optional<Turma> atualizarDadosTurma(String[] conteudoLinha) {

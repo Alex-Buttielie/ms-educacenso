@@ -12,6 +12,10 @@ import static java.util.Optional.ofNullable;
 
 public abstract class  GenericEducacensoImportacao {
 
+
+    protected GenericEducacensoImportacao() {
+    }
+
     public static Date stringToDate(String[] conteudoLinha, int posicaoConteudo) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);

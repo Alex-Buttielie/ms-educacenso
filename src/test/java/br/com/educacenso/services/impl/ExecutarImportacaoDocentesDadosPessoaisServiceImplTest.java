@@ -72,34 +72,34 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     }
 
     @Test
-    public void deveTestarImportarLinha() {
+    public void deveTestarImportarLinha () {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
         when(pessoaRepository.save(any())).thenReturn(pessoa);
         when(professorRepository.findProfessorByPessoa(any())).thenReturn(professor);
-
-        executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(NOVOS_DADOS_PESSOA);
+        when(professorRepository.save(any())).thenReturn(professor.get());
+        var retorno = executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(NOVOS_DADOS_PESSOA);
+        assertNotNull(retorno.get());
     }
 
     @Test
     public void deveBuscarMaiorNivelEscolaridadeConcluida() {
         final String CODIGO_NIVEL = MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO.getDescricao();
         MaiorNivelEscolaridadeConcluido nivel = executarImportacaoDocentesDadosPessoaisService.getMaiorNivelEscolaridadeConcluida(CODIGO_NIVEL);
-        assertEquals(nivel, MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO);
+        assertEquals( MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO, nivel);
     }
 
     @Test
     public void deveBuscarTipoEnsinoMedioCursado() {
         final String CODIGO_ENSINO_MEDIO_CURSADO = TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO.getCodigoEducacenso();
         TipoEnsinoMedioCursado ensinoMedioCursado = executarImportacaoDocentesDadosPessoaisService.getTipoEnsinoMedioCursado(CODIGO_ENSINO_MEDIO_CURSADO);
-        assertEquals(ensinoMedioCursado, TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO);
+        assertEquals(TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO, ensinoMedioCursado);
     }
 
     @Test
     public void deveRastrearPessoaCacteristicasIndiv() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
 
-        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
+        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
 
         assertNotNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), pessoa.getNome());
@@ -110,10 +110,9 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveRastrearPessoaCpf() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
 
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
 
-        assertEquals(pessoaRastreada.isPresent(), TRUE);
+        assertEquals(TRUE, pessoaRastreada.isPresent());
 
     }
 
@@ -121,14 +120,11 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveRastrearPessoaNome() {
         when(pessoaRepository.findPessoaByNome(pessoa.getNome())).thenReturn(Optional.of(pessoa));
 
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaNome(NOVOS_DADOS_PESSOA);
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
 
-        assertEquals(pessoaRastreada.isPresent(), TRUE);
+        assertEquals(TRUE, pessoaRastreada.isPresent());
 
     }
-
-
 
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
@@ -144,7 +140,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveBuscarNacionalidadeCorreta() {
         final String CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getCodigoEducacenso();
         Nacionalidade nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
-        assertEquals(nacionalidade, Nacionalidade.BRASILEIRA);
+        assertEquals( Nacionalidade.BRASILEIRA, nacionalidade);
     }
 
     @Test
@@ -170,7 +166,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     @Test
     public void deveBuscarTipoFiliacao() {
         TipoFiliacao tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(TipoFiliacao.FILIACAO_1_OU_2.getValor());
-        assertEquals(tipoFiliacao, TipoFiliacao.FILIACAO_1_OU_2);
+        assertEquals( TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
     @Test

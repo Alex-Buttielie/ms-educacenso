@@ -1,7 +1,8 @@
 package br.com.educacenso.services;
 
 import java.text.ParseException;
+import java.util.Optional;
 
 public interface ExecutarImportacaoService {
-    void importarLinhaArquivo(String[] conteudoLinha) throws ParseException;
+    Optional<?> importarLinhaArquivo(String[] conteudoLinha) throws ParseException;
 }
