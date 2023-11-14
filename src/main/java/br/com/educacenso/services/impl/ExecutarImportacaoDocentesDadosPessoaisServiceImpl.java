@@ -1,12 +1,17 @@
 package br.com.educacenso.services.impl;
 
-import br.com.educacenso.app.GenericProfessorImportacao;
+import br.com.educacenso.app.GenericPessoaImportacao;
 import br.com.educacenso.app.constraints.MaiorNivelEscolaridadeConcluido;
 import br.com.educacenso.app.constraints.TipoEnsinoMedioCursado;
 import br.com.educacenso.app.constraints.TipoPosGraduacao;
 import br.com.educacenso.app.domains.AreaConhecimento;
 import br.com.educacenso.app.domains.AreaPosGraduacao;
+import br.com.educacenso.app.domains.FormacaoComplementarPedagogicaProfessor;
+import br.com.educacenso.app.domains.OutrosCursosEspecificos;
 import br.com.educacenso.app.domains.Pessoa;
+import br.com.educacenso.app.domains.PosGraduacaoConcluidaProfessor;
+import br.com.educacenso.app.domains.Professor;
+import br.com.educacenso.app.domains.RecursoAlunoParaAvaliacaoInep;
 import br.com.educacenso.app.domains.TipoDeficienciaEspectroAltasHabilidades;
 import br.com.educacenso.repositories.AreaConhecimentoRepository;
 import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
@@ -14,13 +19,16 @@ import br.com.educacenso.repositories.FormacaoComplementarPedagogicaProfessorRep
 import br.com.educacenso.repositories.OutrosCursosEspecificosRepository;
 import br.com.educacenso.repositories.PessoaRepository;
 import br.com.educacenso.repositories.PosGraduacaoConcluidaProfessorRepository;
+import br.com.educacenso.repositories.ProfessorRepository;
 import br.com.educacenso.repositories.RecursoAlunoParaAvaliacaoInepRepository;
 import br.com.educacenso.repositories.TipoDeficienciaEspectroAltasHabilidadesRepository;
 import br.com.educacenso.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.services.ExecutarImportacaoDocentesDadosPessoaisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -35,10 +43,28 @@ import static java.util.Optional.ofNullable;
 @Qualifier("docenteDadosPessoais")
 @Service
 public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
-        extends GenericProfessorImportacao
+        extends GenericPessoaImportacao
         implements ExecutarImportacaoDocentesDadosPessoaisService {
 
+    protected ProfessorRepository repository;
 
+    protected UnidadeEnsinoRepository unidadeEnsinoRepository;
+
+    protected AreaConhecimentoRepository areaConhecimentoRepository;
+
+    protected AreaPosGraduacaoRepository areaPosGraduacaoRepository;
+
+    protected FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository;
+
+    protected TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository;
+
+    protected OutrosCursosEspecificosRepository outrosCursosEspecificosRepository;
+
+    protected RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository;
+    protected PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository;
+    protected PessoaRepository pessoaRepository;
+
+    @Autowired
     public ExecutarImportacaoDocentesDadosPessoaisServiceImpl(PessoaRepository pessoaRepository,
                                                               UnidadeEnsinoRepository unidadeEnsinoRepository,
                                                               AreaConhecimentoRepository areaConhecimentoRepository,
@@ -47,104 +73,141 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                                                               TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository,
                                                               OutrosCursosEspecificosRepository outrosCursosEspecificosRepository,
                                                               RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository,
-                                                              PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository) {
-        super(pessoaRepository,
-                unidadeEnsinoRepository,
-                areaConhecimentoRepository,
-                areaPosGraduacaoRepository,
-                formacaoComplementarPedagogicaProfessorRepository,
-                tipoDeficienciaEspectroAltasHabilidadesRepository,
-                outrosCursosEspecificosRepository,
-                recursoAlunoParaAvaliacaoInepRepository,
-                posGraduacaoConcluidaProfessorRepository);
-    }
-
-    public ExecutarImportacaoDocentesDadosPessoaisServiceImpl() {
-        super();
+                                                              PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository,
+                                                              ProfessorRepository professorRepository) {
+        super(pessoaRepository,unidadeEnsinoRepository);
+        this.unidadeEnsinoRepository = unidadeEnsinoRepository;
+        this.areaConhecimentoRepository = areaConhecimentoRepository;
+        this.areaPosGraduacaoRepository = areaPosGraduacaoRepository;
+        this.formacaoComplementarPedagogicaProfessorRepository = formacaoComplementarPedagogicaProfessorRepository;
+        this.tipoDeficienciaEspectroAltasHabilidadesRepository = tipoDeficienciaEspectroAltasHabilidadesRepository;
+        this.outrosCursosEspecificosRepository = outrosCursosEspecificosRepository;
+        this.recursoAlunoParaAvaliacaoInepRepository = recursoAlunoParaAvaliacaoInepRepository;
+        this.posGraduacaoConcluidaProfessorRepository = posGraduacaoConcluidaProfessorRepository;
+        this.repository = professorRepository;
     }
 
     @Override
     public void importarLinhaArquivo(String[] conteudoLinha) {
+        Pessoa pessoa = salvarPessoa(atualizarDadosPessoa(conteudoLinha));
+        Professor professor = atualizarDadosProfessor(conteudoLinha, pessoa);
         salvarPessoa(atualizarDadosPessoa(conteudoLinha));
+        repository.save(professor);
+    }
+
+    public Professor atualizarDadosProfessor(String[] conteudoLinha, Pessoa pessoa) {
+        return rastrearProfessor(pessoa)
+                .map(professorConsultado -> atualizarDadosProfessorConsultado(Optional.of(professorConsultado), conteudoLinha, pessoa))
+                .orElse(atualizarDadosProfessorNaoConsultado(conteudoLinha, pessoa));
+    }
+
+    public Optional<Professor> rastrearProfessor(Pessoa pessoa) {
+        return repository.findProfessorByPessoa(pessoa);
+    }
+
+    private Professor atualizarDadosProfessorNaoConsultado(String[] conteudoLinha, Pessoa pessoa) {
+        return getDadosProfessorNaLinha(conteudoLinha, Optional.empty(), pessoa);
+    }
+
+    private Professor atualizarDadosProfessorConsultado(Optional<Professor> professorConsultado,
+                                                        String[] conteudoLinha, Pessoa pessoa) {
+        return getDadosProfessorNaLinha(conteudoLinha, professorConsultado, pessoa);
+    }
+
+    private Professor getDadosProfessorNaLinha(String[] conteudoLinha,
+                                               Optional<Professor> professor,
+                                               Pessoa pessoa) {
+        return new Professor()
+                .builder()
+                .id(professor.map(Professor::getId).orElse(null))
+                .pessoa(pessoa)
+                .maiorNivelEscolaridadeConcluido(getMaiorNivelEscolaridadeConcluida(valorString(conteudoLinha, 44)))
+                .tipoEnsinoMedioCursado(getTipoEnsinoMedioCursado(valorString(conteudoLinha, 45)))
+                .tipoEnsinoMedioCursado(getTipoEnsinoMedioCursado(valorString(conteudoLinha, 45)))
+                .naoTemPosGraduacaoConcluida(stringToBoolean(conteudoLinha, 76))
+                .formacaoComplementarPedagogicaProfessor(getFormacoesComplementarPedagogicaProfessor(conteudoLinha, professor))
+                .outrosCursosEspecificos(getOutrosCursosEspecificos(conteudoLinha, professor))
+                .tipoDeficienciaEspectroAltasHabilidades(getTipoDeficienciaEspectroAltasHabilidades(conteudoLinha, professor))
+                .recursoAlunoParaAvaliacaoInep(getRecursoAlunoParaAvaliacaoInep(conteudoLinha, professor))
+                .posGraduacaoConcluidaProfessor(getPosGraduacoesConcluidasProfessor(conteudoLinha, professor))
+                .build();
     }
 
     public MaiorNivelEscolaridadeConcluido getMaiorNivelEscolaridadeConcluida(String conteudoLinha) {
         return MaiorNivelEscolaridadeConcluido.getTipoPorDescricao(conteudoLinha);
     }
 
-    //public RecursoAlunoParaAvaliacaoInep getRecursoAlunoParaAvaliacaoInep(String[] conteudoLinha, Optional<Pessoa> pessoaConsultadaOptional) {
-//
-    //    try {
-//
-    //        Optional<RecursoAlunoParaAvaliacaoInep> recursoAlunoParaAvaliacaoInep = pessoaConsultadaOptional
-    //                .map(Pessoa::getRecursoAlunoParaAvaliacaoInep)
-    //                .filter(Objects::nonNull)
-    //                .stream()
-    //                .findAny();
-//
-    //        return new RecursoAlunoParaAvaliacaoInep()
-    //                .builder()
-    //                .id(recursoAlunoParaAvaliacaoInep.map(RecursoAlunoParaAvaliacaoInep::getId).orElse(null))
-    //                .auxilioLedor(stringToBoolean(conteudoLinha, 26))
-    //                .auxilioTranscricao(stringToBoolean(conteudoLinha, 27))
-    //                .codigoAudioDeficienteVisual(stringToBoolean(conteudoLinha, 33))
-    //                .guiaInterprete(stringToBoolean(conteudoLinha, 28))
-    //                .leituraLabial(stringToBoolean(conteudoLinha, 30))
-    //                .materiaDidaticoProvaBraille(stringToBoolean(conteudoLinha, 36))
-    //                .provaAmpliadaFonte18(stringToBoolean(conteudoLinha, 31))
-    //                .provaLinguaPortuguesaSegundaLinguaSurdosDeficientesAuditivos(stringToBoolean(conteudoLinha, 34))
-    //                .provaSuperAmpliadaFonte24(stringToBoolean(conteudoLinha, 32))
-    //                .provaVideosLibras(stringToBoolean(conteudoLinha, 35))
-    //                .tradutorInterpreteLibras(stringToBoolean(conteudoLinha, 29))
-    //                .nenhum(stringToBoolean(conteudoLinha, 37))
-    //                .build();
-//
-    //    } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
-    //        return null;
-    //    }
-//
-    //}
+    public RecursoAlunoParaAvaliacaoInep getRecursoAlunoParaAvaliacaoInep(String[] conteudoLinha, Optional<Professor> professorConsultadaOptional) {
+
+        try {
+
+            Optional<RecursoAlunoParaAvaliacaoInep> recursoAlunoParaAvaliacaoInep = professorConsultadaOptional
+                    .map(Professor::getRecursoAlunoParaAvaliacaoInep)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return new RecursoAlunoParaAvaliacaoInep()
+                    .builder()
+                    .id(recursoAlunoParaAvaliacaoInep.map(RecursoAlunoParaAvaliacaoInep::getId).orElse(null))
+                    .auxilioLedor(stringToBoolean(conteudoLinha, 26))
+                    .auxilioTranscricao(stringToBoolean(conteudoLinha, 27))
+                    .codigoAudioDeficienteVisual(stringToBoolean(conteudoLinha, 33))
+                    .guiaInterprete(stringToBoolean(conteudoLinha, 28))
+                    .leituraLabial(stringToBoolean(conteudoLinha, 30))
+                    .materiaDidaticoProvaBraille(stringToBoolean(conteudoLinha, 36))
+                    .provaAmpliadaFonte18(stringToBoolean(conteudoLinha, 31))
+                    .provaLinguaPortuguesaSegundaLinguaSurdosDeficientesAuditivos(stringToBoolean(conteudoLinha, 34))
+                    .provaSuperAmpliadaFonte24(stringToBoolean(conteudoLinha, 32))
+                    .provaVideosLibras(stringToBoolean(conteudoLinha, 35))
+                    .tradutorInterpreteLibras(stringToBoolean(conteudoLinha, 29))
+                    .nenhum(stringToBoolean(conteudoLinha, 37))
+                    .build();
+
+        } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
+            return null;
+        }
+
+    }
 
     public TipoEnsinoMedioCursado getTipoEnsinoMedioCursado(String conteudo) {
         return (TipoEnsinoMedioCursado) buscaRegistroConteudoLido(TipoEnsinoMedioCursado.getValorStrPeloCodigo(conteudo), TipoEnsinoMedioCursado.values());
     }
 
-    //public PosGraduacaoConcluidaProfessor getPosGraduacoesConcluidasProfessor(String[] conteudoLinha, Optional<Pessoa> pessoaConsultadaOptional) {
-    //    try {
+    public PosGraduacaoConcluidaProfessor getPosGraduacoesConcluidasProfessor(String[] conteudoLinha, Optional<Professor> professorConsultadaOptional) {
+        try {
+            Optional<PosGraduacaoConcluidaProfessor> posGraduacaoConcluidaProfessorOptional = professorConsultadaOptional
+                    .map(Professor::getPosGraduacaoConcluidaProfessor)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
 
-    //        Optional<PosGraduacaoConcluidaProfessor> posGraduacaoConcluidaProfessorOptional = pessoaConsultadaOptional
-    //                .map(Pessoa::getPosGraduacaoConcluidaProfessor)
-    //                .filter(Objects::nonNull)
-    //                .stream()
-    //                .findAny();
-
-    //        return new PosGraduacaoConcluidaProfessor()
-    //                .builder()
-    //                .id(posGraduacaoConcluidaProfessorOptional.map(PosGraduacaoConcluidaProfessor::getId).orElse(null))
-    //                .tipoPosGraducacao1(getTipoPosGraduacao(conteudoLinha, 58))
-    //                .anoConclusao1(stringToLong(conteudoLinha, 60))
-    //                .areaPosGraduacao1(getAreaPosGraduacao(conteudoLinha, 59))
-    //                .tipoPosGraducacao2(getTipoPosGraduacao(conteudoLinha, 61))
-    //                .areaPosGraduacao2(getAreaPosGraduacao(conteudoLinha, 62))
-    //                .anoConclusao2(stringToLong(conteudoLinha, 63))
-    //                .tipoPosGraducacao3(getTipoPosGraduacao(conteudoLinha, 64))
-    //                .areaPosGraduacao3(getAreaPosGraduacao(conteudoLinha, 65))
-    //                .anoConclusao3(stringToLong(conteudoLinha, 66))
-    //                .tipoPosGraducacao4(getTipoPosGraduacao(conteudoLinha, 67))
-    //                .areaPosGraduacao4(getAreaPosGraduacao(conteudoLinha, 68))
-    //                .anoConclusao4(stringToLong(conteudoLinha, 69))
-    //                .tipoPosGraducacao5(getTipoPosGraduacao(conteudoLinha, 70))
-    //                .areaPosGraduacao5(getAreaPosGraduacao(conteudoLinha, 71))
-    //                .anoConclusao5(stringToLong(conteudoLinha, 72))
-    //                .tipoPosGraducacao6(getTipoPosGraduacao(conteudoLinha, 73))
-    //                .areaPosGraduacao6(getAreaPosGraduacao(conteudoLinha, 74))
-    //                .anoConclusao6(stringToLong(conteudoLinha, 75))
-    //                .build();
-
-    //    } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
-    //        return null;
-    //    }
-    //}
+            return new PosGraduacaoConcluidaProfessor()
+                    .builder()
+                    .id(posGraduacaoConcluidaProfessorOptional.map(PosGraduacaoConcluidaProfessor::getId).orElse(null))
+                    .tipoPosGraducacao1(getTipoPosGraduacao(conteudoLinha, 58))
+                    .anoConclusao1(stringToLong(conteudoLinha, 60))
+                    .areaPosGraduacao1(getAreaPosGraduacao(conteudoLinha, 59))
+                    .tipoPosGraducacao2(getTipoPosGraduacao(conteudoLinha, 61))
+                    .areaPosGraduacao2(getAreaPosGraduacao(conteudoLinha, 62))
+                    .anoConclusao2(stringToLong(conteudoLinha, 63))
+                    .tipoPosGraducacao3(getTipoPosGraduacao(conteudoLinha, 64))
+                    .areaPosGraduacao3(getAreaPosGraduacao(conteudoLinha, 65))
+                    .anoConclusao3(stringToLong(conteudoLinha, 66))
+                    .tipoPosGraducacao4(getTipoPosGraduacao(conteudoLinha, 67))
+                    .areaPosGraduacao4(getAreaPosGraduacao(conteudoLinha, 68))
+                    .anoConclusao4(stringToLong(conteudoLinha, 69))
+                    .tipoPosGraducacao5(getTipoPosGraduacao(conteudoLinha, 70))
+                    .areaPosGraduacao5(getAreaPosGraduacao(conteudoLinha, 71))
+                    .anoConclusao5(stringToLong(conteudoLinha, 72))
+                    .tipoPosGraducacao6(getTipoPosGraduacao(conteudoLinha, 73))
+                    .areaPosGraduacao6(getAreaPosGraduacao(conteudoLinha, 74))
+                    .anoConclusao6(stringToLong(conteudoLinha, 75))
+                    .build();
+        } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
+            return null;
+        }
+    }
 
     public TipoPosGraduacao getTipoPosGraduacao(String[] conteudoLinha, int posicaoConteudo) {
         try {
@@ -167,75 +230,74 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
         }
     }
 
-    // public OutrosCursosEspecificos getOutrosCursosEspecificos(String[] conteudoLinha, Optional<Pessoa> pessoaConsultadaOptional) {
-    //     try {
-//
-    //         Optional<OutrosCursosEspecificos> outrosCursosEspecificosOptional;
-    //         outrosCursosEspecificosOptional = pessoaConsultadaOptional
-    //                 .map(Pessoa::getOutrosCursosEspecificos)
-    //                 .filter(Objects::nonNull)
-    //                 .stream()
-    //                 .findAny();
-//
-    //         return new OutrosCursosEspecificos()
-    //                 .builder()
-    //                 .id(outrosCursosEspecificosOptional.map(OutrosCursosEspecificos::getId).orElse(null))
-    //                 .anosFinaisEnsinoFundamental(stringToBoolean(conteudoLinha, 80))
-    //                 .anosIniciaisEnsinoFundamental(stringToBoolean(conteudoLinha, 79))
-    //                 .creche(stringToBoolean(conteudoLinha, 77))
-    //                 .direitoCriacaoAdolescente(stringToBoolean(conteudoLinha, 89))
-    //                 .educacaoAmbiental(stringToBoolean(conteudoLinha, 86))
-    //                 .educacaoCampo(stringToBoolean(conteudoLinha, 85))
-    //                 .educacaoDireitosHumanos(stringToBoolean(conteudoLinha, 87))
-    //                 .educacaoEspecial(stringToBoolean(conteudoLinha, 83))
-    //                 .educacaoIndigena(stringToBoolean(conteudoLinha, 84))
-    //                 .educacaoJovensAdultos(stringToBoolean(conteudoLinha, 82))
-    //                 .educacaoRelacoesEtnicoRaciaisCulturaAfroBrasileira(stringToBoolean(conteudoLinha, 90))
-    //                 .ensinoMedio(stringToBoolean(conteudoLinha, 81))
-    //                 .generoDiversidadeSexual(stringToBoolean(conteudoLinha, 88))
-    //                 .gestaoEscolar(stringToBoolean(conteudoLinha, 91))
-    //                 .outros(stringToBoolean(conteudoLinha, 92))
-    //                 .naoTemOutrosCursosEspecificos(stringToBoolean(conteudoLinha, 94))
-    //                 .preEscola(stringToBoolean(conteudoLinha, 78))
-    //                 .build();
-//
-    //     } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
-    //         return null;
-    //     }
-    // }
-
-    //public FormacaoComplementarPedagogicaProfessor getFormacoesComplementarPedagogicaProfessor(String[] conteudoLinha,
-    //                                                                                            Optional<Pessoa> pessoaConsultadaOptional) {
-    //    try {
-    //        Optional<FormacaoComplementarPedagogicaProfessor> formacaoComplementarPedagogicaProfessorOptional = pessoaConsultadaOptional
-    //                .map(Pessoa::getFormacaoComplementarPedagogicaProfessor)
-    //                .filter(Objects::nonNull)
-    //                .stream()
-    //                .findAny();
-//
-    //        return new FormacaoComplementarPedagogicaProfessor()
-    //                .builder()
-    //                .id(formacaoComplementarPedagogicaProfessorOptional.map(FormacaoComplementarPedagogicaProfessor::getId).orElse(null))
-    //                .areaConhecimentoComponentesCurriculares1(getAreaConhecimentoCurricular(conteudoLinha, 55))
-    //                .areaConhecimentoComponentesCurriculares2(getAreaConhecimentoCurricular(conteudoLinha, 56))
-    //                .areaConhecimentoComponentesCurriculares3(getAreaConhecimentoCurricular(conteudoLinha, 57))
-    //                .build();
-//
-    //    }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
-    //        return null;
-    //    }
-//
-    //}
-
-    public TipoDeficienciaEspectroAltasHabilidades getTipoDeficienciaEspectroAltasHabilidades(String[] conteudoLinha, Optional<Pessoa> pessoaConsultadaOptional) {
+    public OutrosCursosEspecificos getOutrosCursosEspecificos(String[] conteudoLinha, Optional<Professor> professorConsultadaOptional) {
         try {
-            //Optional<TipoDeficienciaEspectroAltasHabilidades> tipoDeficienciaEspectroAltasHabilidadesOptional = pessoaConsultadaOptional
-            //        .map(Pessoa::getTipoDeficienciaEspectroAltasHabilidades)
-            //        .filter(Objects::nonNull)
-            //        .stream()
-            //        .findAny();
 
-            Optional<TipoDeficienciaEspectroAltasHabilidades> tipoDeficienciaEspectroAltasHabilidadesOptional = Optional.ofNullable(TipoDeficienciaEspectroAltasHabilidades.builder().build());
+            Optional<OutrosCursosEspecificos> outrosCursosEspecificosOptional;
+            outrosCursosEspecificosOptional = professorConsultadaOptional
+                    .map(Professor::getOutrosCursosEspecificos)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return new OutrosCursosEspecificos()
+                    .builder()
+                    .id(outrosCursosEspecificosOptional.map(OutrosCursosEspecificos::getId).orElse(null))
+                    .anosFinaisEnsinoFundamental(stringToBoolean(conteudoLinha, 80))
+                    .anosIniciaisEnsinoFundamental(stringToBoolean(conteudoLinha, 79))
+                    .creche(stringToBoolean(conteudoLinha, 77))
+                    .direitoCriacaoAdolescente(stringToBoolean(conteudoLinha, 89))
+                    .educacaoAmbiental(stringToBoolean(conteudoLinha, 86))
+                    .educacaoCampo(stringToBoolean(conteudoLinha, 85))
+                    .educacaoDireitosHumanos(stringToBoolean(conteudoLinha, 87))
+                    .educacaoEspecial(stringToBoolean(conteudoLinha, 83))
+                    .educacaoIndigena(stringToBoolean(conteudoLinha, 84))
+                    .educacaoJovensAdultos(stringToBoolean(conteudoLinha, 82))
+                    .educacaoRelacoesEtnicoRaciaisCulturaAfroBrasileira(stringToBoolean(conteudoLinha, 90))
+                    .ensinoMedio(stringToBoolean(conteudoLinha, 81))
+                    .generoDiversidadeSexual(stringToBoolean(conteudoLinha, 88))
+                    .gestaoEscolar(stringToBoolean(conteudoLinha, 91))
+                    .outros(stringToBoolean(conteudoLinha, 92))
+                    .naoTemOutrosCursosEspecificos(stringToBoolean(conteudoLinha, 94))
+                    .preEscola(stringToBoolean(conteudoLinha, 78))
+                    .build();
+
+        } catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public FormacaoComplementarPedagogicaProfessor getFormacoesComplementarPedagogicaProfessor(String[] conteudoLinha,
+                                                                                               Optional<Professor> ProfessorConsultadoOptional) {
+        try {
+            Optional<FormacaoComplementarPedagogicaProfessor> formacaoComplementarPedagogicaProfessorOptional = ProfessorConsultadoOptional
+                    .map(Professor::getFormacaoComplementarPedagogicaProfessor)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return new FormacaoComplementarPedagogicaProfessor()
+                    .builder()
+                    .id(formacaoComplementarPedagogicaProfessorOptional.map(FormacaoComplementarPedagogicaProfessor::getId).orElse(null))
+                    .areaConhecimentoComponentesCurriculares1(getAreaConhecimentoCurricular(conteudoLinha, 55))
+                    .areaConhecimentoComponentesCurriculares2(getAreaConhecimentoCurricular(conteudoLinha, 56))
+                    .areaConhecimentoComponentesCurriculares3(getAreaConhecimentoCurricular(conteudoLinha, 57))
+                    .build();
+
+        }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
+            return null;
+        }
+
+    }
+
+    public TipoDeficienciaEspectroAltasHabilidades getTipoDeficienciaEspectroAltasHabilidades(String[] conteudoLinha, Optional<Professor> professorConsultadoOptional) {
+        try {
+            Optional<TipoDeficienciaEspectroAltasHabilidades> tipoDeficienciaEspectroAltasHabilidadesOptional = professorConsultadoOptional
+                    .map(Professor::getTipoDeficienciaEspectroAltasHabilidades)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
             return new TipoDeficienciaEspectroAltasHabilidades()
                     .builder()
                     .id(tipoDeficienciaEspectroAltasHabilidadesOptional.map(TipoDeficienciaEspectroAltasHabilidades::getId).orElse(null))

@@ -4,6 +4,7 @@ import br.com.educacenso.app.constraints.TipoEnsinoMedioCursado;
 import br.com.educacenso.app.constraints.MaiorNivelEscolaridadeConcluido;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,7 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class Professor {
     @Id

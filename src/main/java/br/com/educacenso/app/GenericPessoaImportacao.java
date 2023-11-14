@@ -46,9 +46,6 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
     }
 
-    public GenericPessoaImportacao() {
-    }
-
 
     protected static CorRaca getCorRaca(String[] conteudoLinha, int posicaoConteudo) {
         try {
@@ -76,9 +73,10 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
         return codigoSexo -> Sexo.values()[codigoSexo -1];
     }
 
-    public void salvarPessoa(Pessoa pessoaParaSalvar) {
-        Optional.ofNullable(pessoaParaSalvar).ifPresent(pessoa -> pessoaRepository.save(pessoa));
+    public Pessoa salvarPessoa(Pessoa pessoaParaSalvar) {
+        Pessoa pessoa = Optional.ofNullable(pessoaParaSalvar).map(p -> pessoaRepository.save(p)).orElse(null);
         limparPessoaScopo();
+        return pessoa;
     }
 
     protected void limparPessoaScopo() {
@@ -161,11 +159,12 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public LocalizacaoZonaResidencia getLocalizacaoZonaResidencia(String conteudo) {
-        return (LocalizacaoZonaResidencia) buscaRegistroConteudoLido(conteudo, LocalizacaoZonaResidencia.values());
+        return (LocalizacaoZonaResidencia) buscaRegistroConteudoLido(LocalizacaoZonaResidencia.getValorStrPeloCodigo(conteudo), LocalizacaoZonaResidencia.values());
     }
 
     public LocalizacaoDiferenciadaResidencia getLocalizacaoDiferenciadaResidencia(String conteudo) {
-        return (LocalizacaoDiferenciadaResidencia) buscaRegistroConteudoLido(conteudo, LocalizacaoDiferenciadaResidencia.values());
+        return (LocalizacaoDiferenciadaResidencia) buscaRegistroConteudoLido(LocalizacaoDiferenciadaResidencia.getValorStrPeloCodigo(conteudo),
+                LocalizacaoDiferenciadaResidencia.values());
     }
 
     public Nacionalidade getNacionalidade(String conteudo) {
@@ -173,7 +172,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public TipoFiliacao getTipoFiliacao(String conteudo) {
-        return (TipoFiliacao) buscaRegistroConteudoLido(conteudo, TipoFiliacao.values());
+        return (TipoFiliacao) buscaRegistroConteudoLido(TipoFiliacao.getValorStrPeloCodigo(conteudo), TipoFiliacao.values());
     }
 
 }
