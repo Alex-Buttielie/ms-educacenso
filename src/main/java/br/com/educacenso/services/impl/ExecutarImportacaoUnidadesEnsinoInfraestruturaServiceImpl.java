@@ -25,7 +25,7 @@ import br.com.educacenso.app.domains.TratamentoLixo;
 import br.com.educacenso.app.domains.UnidadeEnsino;
 import br.com.educacenso.repositories.LinguaIndigenaRepository;
 import br.com.educacenso.repositories.UnidadeEnsinoRepository;
-import br.com.educacenso.architecture.GenericEducation;
+import br.com.educacenso.architecture.GenericEducacensoImportacao;
 import br.com.educacenso.services.ExecutarImportacaoUnidadesEnsinoInfraestruturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +37,7 @@ import java.util.Optional;
 @Qualifier("unidadeEnsinoInfraestrutura")
 @Component
 public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
-        extends GenericEducation
+        extends GenericEducacensoImportacao
         implements ExecutarImportacaoUnidadesEnsinoInfraestruturaService {
 
     @Autowired

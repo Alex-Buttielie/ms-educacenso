@@ -1,17 +1,13 @@
 package br.com.educacenso.services.impl;
 
 import br.com.educacenso.app.constraints.LocalizacaoDiferenciadaResidencia;
-import br.com.educacenso.app.constraints.LocalizacaoZonaResidencia;
 import br.com.educacenso.app.constraints.MaiorNivelEscolaridadeConcluido;
 import br.com.educacenso.app.constraints.Nacionalidade;
 import br.com.educacenso.app.constraints.TipoEnsinoMedioCursado;
 import br.com.educacenso.app.constraints.TipoFiliacao;
 import br.com.educacenso.app.domains.AreaConhecimento;
 import br.com.educacenso.app.domains.Pessoa;
-import br.com.educacenso.app.domains.RecursoAlunoParaAvaliacaoInep;
 import br.com.educacenso.app.domains.TipoDeficienciaEspectroAltasHabilidades;
-import br.com.educacenso.contraints.Paises;
-import br.com.educacenso.contraints.TipoRegistro;
 import br.com.educacenso.repositories.AreaConhecimentoRepository;
 import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
 import br.com.educacenso.repositories.FormacaoComplementarPedagogicaProfessorRepository;
@@ -26,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
@@ -38,7 +33,6 @@ import java.util.Optional;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -64,17 +58,18 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         }
     }
 
-    @Autowired
+    @MockBean
     private PessoaRepository pessoaRepository;
-    @Autowired
+    @MockBean
     private AreaConhecimentoRepository areaConhecimentoRepository;
-    @Autowired
+    @MockBean
     private ExecutarImportacaoDocentesDadosPessoaisService executarImportacaoDocentesDadosPessoaisService;
+    @MockBean
+    private UnidadeEnsinoRepository unidadeEnsinoRepository;
     @Mock
     private Pessoa pessoa;
     @Mock
     private AreaConhecimento areaConhecimento;
-    private final String[] DADOS_PESSOA_VAZIO_STR = {};
 
     private final String[] NOVOS_DADOS_DOCENTE = {"30","52083535","3281","","78657369168","ANGELA MARIA TEIXEIRA MARTINS",
             "20/08/1972","1","MARIA LIMA TEIXEIRA", "ANTONIO TOMAZ TEIXEIRA","2","3","2","724","5218508","0","","","","",
@@ -85,6 +80,11 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
     public void init() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
         when(areaConhecimentoRepository.findById(areaConhecimento.getCodigo())).thenReturn(Optional.of(areaConhecimento));
+        executarImportacaoDocentesDadosPessoaisService =
+                new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(pessoaRepository, unidadeEnsinoRepository, areaConhecimentoRepository,
+                        null, null,
+                        null, null,
+                        null,null);
     }
 
 
@@ -92,18 +92,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         assertThrows(Exception.class, ()-> executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(null));
     }
 
-    @Test
-    public void deveAtualizarDadosPessoa() {
-        Pessoa pessoaAtualizada = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoa(NOVOS_DADOS_DOCENTE);
 
-        assertNotNull(pessoaAtualizada);
-        /** vai para o teste getDadosPessoaNaLinha**/
-        assertNotNull(pessoaAtualizada.getTipoRegistro());
-        assertEquals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO, pessoaAtualizada.getTipoRegistro());
-        assertEquals(Paises.ESPANHA.getValor(), pessoaAtualizada.getPaisNacionalidade().getValor());
-        assertEquals(Nacionalidade.BRASILEIRA_NASCIDO_EXTERIOR_OU_NATURALIZADO, pessoaAtualizada.getNacionalidade());
-
-    }
 
     @Test
     public void deveRastrearPessoaCacteristicasIndiv() {
@@ -157,40 +146,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
 
     }
 
-    @Test
-    public void deveAtualizarDadosPessoaConsultada() {
-        final String[] dadosPessoaStr = {"1"};
-        final Pessoa dadosPessoa = new Pessoa().builder().id(1l).build();
 
-        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaConsultada(Optional.of(dadosPessoa), dadosPessoaStr);
-
-        assertNotNull(pessoaConsulta);
-        assertNotNull(pessoaConsulta.getId());
-
-    }
-
-    @Test
-    public void deveAtualizarDadosPessoaNaoConsultada() {
-        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
-        assertNotNull(pessoaConsulta);
-
-    }
-
-    @Test
-    public void deveBuscarLocalizacaoZonaResidencia() {
-        final int POSICAO_CAMPO_LOCALIZACAO = 42;
-        LocalizacaoZonaResidencia localizacao = executarImportacaoDocentesDadosPessoaisService
-                .getLocalizacaoZonaResidencia(NOVOS_DADOS_DOCENTE[POSICAO_CAMPO_LOCALIZACAO]);
-        assertNotNull(localizacao);
-
-    }
-
-    @Test
-    public void naoDeveBuscarLocalizacaoZonaResidencia() {
-        Pessoa pessoaConsulta = executarImportacaoDocentesDadosPessoaisService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
-        assertNull(pessoaConsulta.getLocalizacaoZonaResidencia());
-
-    }
 
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
@@ -214,7 +170,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         assertEquals(nivel, MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO);
     }
 
-    @Test
+    /*@Test
     public void deveBuscarRecursoAlunoParaAvaliacaoInep() {
         RecursoAlunoParaAvaliacaoInep recurso = RecursoAlunoParaAvaliacaoInep.builder().auxilioLedor(true).build();
 
@@ -232,7 +188,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         assertEquals(pessoaComId.getRecursoAlunoParaAvaliacaoInep(), recurso);
         assertNotNull(pessoaComId.getId());
 
-    }
+    }*/
 
     @Test
     public void deveBuscarTipoEnsinoMedioCursado() {

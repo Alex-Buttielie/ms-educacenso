@@ -10,9 +10,9 @@ import java.util.Locale;
 
 import static java.util.Optional.ofNullable;
 
-public abstract class GenericEducation {
+public abstract class GenericEducacensoImportacao {
 
-    public Date stringToDate(String[] conteudoLinha, int posicaoConteudo) {
+    public static Date stringToDate(String[] conteudoLinha, int posicaoConteudo) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
             return formatter.parse(conteudoLinha[posicaoConteudo].replace("/", "-"));
@@ -21,7 +21,7 @@ public abstract class GenericEducation {
         }
     }
 
-    public String valorString(String[] conteudoLinha, int posicaoConteudo) {
+    public static String valorString(String[] conteudoLinha, int posicaoConteudo) {
         try{
             return !conteudoLinha[posicaoConteudo].isEmpty() ? conteudoLinha[posicaoConteudo] : null;
         }catch (IndexOutOfBoundsException e){
@@ -30,15 +30,16 @@ public abstract class GenericEducation {
 
     }
 
-    public Boolean stringToBoolean(String[] conteudoLinha, int posicaoConteudo) {
+    public static Boolean stringToBoolean(String[] conteudoLinha, int posicaoConteudo) {
         try{
-            return Boolean.parseBoolean(conteudoLinha[posicaoConteudo]);
+            String strBool = conteudoLinha[posicaoConteudo].equals("1") ? "true" : "false";
+            return Boolean.parseBoolean(strBool);
         }catch (IndexOutOfBoundsException e){
             return false;
         }
 
     }
-    public Integer stringToInteger(String[] conteudoLinha, int posicaoConteudo) {
+    public static Integer stringToInteger(String[] conteudoLinha, int posicaoConteudo) {
         try{
             return Integer.parseInt(conteudoLinha[posicaoConteudo]);
         } catch (IndexOutOfBoundsException | NumberFormatException | NullPointerException e){
@@ -47,7 +48,7 @@ public abstract class GenericEducation {
 
     }
 
-    public Long stringToLong(String[] conteudoLinha, int posicaoConteudo) {
+    public static Long stringToLong(String[] conteudoLinha, int posicaoConteudo) {
         try{
             return !conteudoLinha[posicaoConteudo].isEmpty() ? Long.parseLong(conteudoLinha[posicaoConteudo]) : null;
         }catch (IndexOutOfBoundsException | NumberFormatException e){
@@ -55,19 +56,19 @@ public abstract class GenericEducation {
         }
     }
 
-    protected TipoRegistro getTipoRegistro(String conteudo) {
+    protected static TipoRegistro getTipoRegistro(String conteudo) {
         return TipoRegistro.getTipoPorDescricao(conteudo);
     }
 
-    protected void atualizarPropriedadesObjeto(Object objetoAtualizado, Object objetoParaAtualizar) {
+    protected static void atualizarPropriedadesObjeto(Object objetoAtualizado, Object objetoParaAtualizar) {
         BeanUtils.copyProperties(objetoAtualizado, objetoParaAtualizar);
     }
-    protected Object atualizarPropriedadesObjetoReturn(Object objeto, Object objetoParaAtualizar) {
+    protected static Object atualizarPropriedadesObjetoReturn(Object objeto, Object objetoParaAtualizar) {
         atualizarPropriedadesObjeto(objeto, objetoParaAtualizar);
         return objetoParaAtualizar;
     }
 
-    protected Object buscaRegistroConteudoLido(String conteudo, Object[] enumParaBusca) {
+    protected static Object buscaRegistroConteudoLido(String conteudo, Object[] enumParaBusca) {
         return ofNullable(conteudo).map(cont -> enumParaBusca[Integer.parseInt(cont)]).orElse(null);
     }
 

@@ -107,14 +107,6 @@ public class Pessoa implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn()
     @JsonFormat
-    private TipoDeficienciaEspectroAltasHabilidades tipoDeficienciaEspectroAltasHabilidades;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    @JsonFormat
-    private RecursoAlunoParaAvaliacaoInep recursoAlunoParaAvaliacaoInep;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    @JsonFormat
     private Municipio fkMunResid;
 
 }

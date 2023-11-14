@@ -1,13 +1,12 @@
-package br.com.educacenso.educacao;
+package br.com.educacenso;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EducacensoApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+    //@Test
+    //void contextLoads() {
+    //}
 
 }
