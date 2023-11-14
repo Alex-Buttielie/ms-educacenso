@@ -5,6 +5,7 @@ import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
 import br.com.educacenso.repositories.FormacaoComplementarPedagogicaProfessorRepository;
 import br.com.educacenso.repositories.OutrosCursosEspecificosRepository;
 import br.com.educacenso.repositories.PosGraduacaoConcluidaProfessorRepository;
+import br.com.educacenso.repositories.ProfessorRepository;
 import br.com.educacenso.repositories.TipoDeficienciaEspectroAltasHabilidadesRepository;
 import br.com.educacenso.repositories.PessoaRepository;
 import br.com.educacenso.services.impl.ExecutarImportacaoTurmasServiceImpl;
@@ -121,6 +122,7 @@ public enum TipoImportacaoEducacenso {
     protected AreaConhecimentoRepository areaConhecimentoRepository;
     protected AreaPosGraduacaoRepository areaPosGraduacaoRepository;
     protected FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository;
+    protected ProfessorRepository professorRepository;
     protected TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository;
     protected OutrosCursosEspecificosRepository outrosCursosEspecificosRepository;
     protected RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository;
@@ -158,7 +160,8 @@ public enum TipoImportacaoEducacenso {
                 this.tipoDeficienciaEspectroAltasHabilidadesRepository,
                 this.outrosCursosEspecificosRepository,
                 this.recursoAlunoParaAvaliacaoInepRepository,
-                this.posGraduacaoConcluidaProfessorRepository);
+                this.posGraduacaoConcluidaProfessorRepository,
+                this.professorRepository);
     }
 
     private void setPessoaRepository(PessoaRepository pessoaRepository) {
@@ -179,6 +182,10 @@ public enum TipoImportacaoEducacenso {
     private void setFormacaoComplementarPedagogicaProfessorRepository(FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository) {
         this.formacaoComplementarPedagogicaProfessorRepository = formacaoComplementarPedagogicaProfessorRepository;
     }
+    public void setProfessorRepository(ProfessorRepository professorRepository) {
+        this.professorRepository = professorRepository;
+    }
+
     private void setRecursoAlunoParaAvaliacaoInepRepository(RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository) {
         this.recursoAlunoParaAvaliacaoInepRepository= recursoAlunoParaAvaliacaoInepRepository;
     }
@@ -276,6 +283,8 @@ public enum TipoImportacaoEducacenso {
 
         @Autowired
         private FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository;
+        @Autowired
+        private ProfessorRepository professorRepository;
 
         @Autowired
         protected TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository;
@@ -340,6 +349,7 @@ public enum TipoImportacaoEducacenso {
                 item.setTurma(turmaRepository);
                 item.setAreaPosGraduacao(areaPosGraduacaoRepository);
                 item.setFormacaoComplementarPedagogicaProfessorRepository(formacaoComplementarPedagogicaProfessorRepository);
+                item.setProfessorRepository(professorRepository);
                 item.setTipoDeficienciaEspectroAltasHabilidadesRepository(tipoDeficienciaEspectroAltasHabilidadesRepository);
                 item.setOutrosCursosEspecificosRepository(outrosCursosEspecificosRepository);
                 item.setRecursoAlunoParaAvaliacaoInepRepository(recursoAlunoParaAvaliacaoInepRepository);
