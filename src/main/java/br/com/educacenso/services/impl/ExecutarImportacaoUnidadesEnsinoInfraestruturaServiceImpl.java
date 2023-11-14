@@ -92,7 +92,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                                                                                        Optional<UnidadeEnsino> unidadeOptional) {
         try {
 
-            Optional<OrgaosColegiadosFuncionamentoEscola> orgaosColegiadosFuncionamentoEscola = unidadeOptional
+            var orgaosColegiadosFuncionamentoEscola = unidadeOptional
                     .map(UnidadeEnsino::getOrgaosColegiadosFuncionamentoEscola)
                     .filter(Objects::nonNull)
                     .stream()
@@ -119,7 +119,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                                                                  Optional<UnidadeEnsino> unidadeOptional) {
         try {
 
-            Optional<ReservaVagasSistemaCotas> reservaVagasSistemaCotasOptional = unidadeOptional
+            var reservaVagasSistemaCotasOptional = unidadeOptional
                     .map(UnidadeEnsino::getReservaVagasSistemaCotas)
                     .filter(Objects::nonNull)
                     .stream()
@@ -146,7 +146,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
 
     private IdiomaEnsino getIdiomaEnsino(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<IdiomaEnsino> idiomaEnsinoOptional = unidadeOptional
+            var idiomaEnsinoOptional = unidadeOptional
                     .map(UnidadeEnsino::getIdiomaEnsino)
                     .filter(Objects::nonNull)
                     .stream()
@@ -177,7 +177,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                                                                                        Optional<UnidadeEnsino> unidadeOptional) {
         try {
 
-            Optional<InstrumentosMateriaisSocioCulturais> instrumentosMateriaisSocioCulturais = unidadeOptional
+            var instrumentosMateriaisSocioCulturais = unidadeOptional
                     .map(UnidadeEnsino::getInstrumentosMateriaisSocioCulturais)
                     .filter(Objects::nonNull)
                     .stream()
@@ -211,7 +211,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private TotalProfissionaisAtivosEscola getTotalProfissionaisAtivosEscola(String[] conteudoLinha,
                                                                              Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<TotalProfissionaisAtivosEscola> totalProfissionaisAtivosEscolaOptional = unidadeOptional
+            var totalProfissionaisAtivosEscolaOptional = unidadeOptional
                     .map(UnidadeEnsino::getTotalProfissionaisAtivosEscola)
                     .filter(Objects::nonNull)
                     .stream()
@@ -247,13 +247,13 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private RedeLocalInterligacaoComputadores getRedeLocalInterligacaoComputadores(String[] conteudoLinha,
                                                                                    Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<RedeLocalInterligacaoComputadores> redeLocalInterligacaoComputadoresOptional = unidadeOptional
+            var redeLocalInterligacaoComputadoresOptional = unidadeOptional
                     .map(UnidadeEnsino::getRedeLocalInterligacaoComputadores)
                     .filter(Objects::nonNull)
                     .stream()
                     .findAny();
 
-            return   RedeLocalInterligacaoComputadores
+            return RedeLocalInterligacaoComputadores
                     .builder()
                     .id(redeLocalInterligacaoComputadoresOptional.map(RedeLocalInterligacaoComputadores::getId).orElse(null))
                     .cabo(stringToBoolean(conteudoLinha, 112))
@@ -270,7 +270,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private EquipamentosUsadosAlunosAcessoInternet getEquipamentosUsadosAlunosAcessosInternet(String[] conteudoLinha,
                                                                                               Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<EquipamentosUsadosAlunosAcessoInternet> equipamentosUsadosAlunosAcessoInternetOptional = unidadeOptional
+            var equipamentosUsadosAlunosAcessoInternetOptional = unidadeOptional
                     .map(UnidadeEnsino::getEquipamentosUsadosAlunosAcessoInternet)
                     .filter(Objects::nonNull)
                     .stream()
@@ -293,7 +293,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private AcessoInternet getAcessoInternet(String[] conteudoLinha,
                                              Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<AcessoInternet> acessoInternetOptional = unidadeOptional
+            var acessoInternetOptional = unidadeOptional
                     .map(UnidadeEnsino::getAcessoInternet)
                     .filter(Objects::nonNull)
                     .stream()
@@ -317,7 +317,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private QuantidadeComputadoresEmUsoAlunos getQuantidadeComputadoresEmUsoPeloAlunos(String[] conteudoLinha,
                                                                                        Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<QuantidadeComputadoresEmUsoAlunos> quantidadeComputadoresEmUsoAlunosOptional = unidadeOptional
+            var quantidadeComputadoresEmUsoAlunosOptional = unidadeOptional
                     .map(UnidadeEnsino::getQuantidadeComputadoresEmUsoAlunos)
                     .filter(Objects::nonNull)
                     .stream()
@@ -338,8 +338,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private QuantidadeEquipamentosProcessoAprendizagem getQuantidadeEquipamentosUsadosProcessoAprendizagem(String[] conteudoLinha,
                                                                                                            Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-            Optional<QuantidadeEquipamentosProcessoAprendizagem> quantidadeEquipamentosProcessoAprendizagemOptional = unidadeOptional
+            var quantidadeEquipamentosProcessoAprendizagemOptional = unidadeOptional
                     .map(UnidadeEnsino::getQuantidadeEquipamentosProcessoAprendizagem)
                     .filter(Objects::nonNull)
                     .stream()
@@ -363,8 +362,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private EquipamentosExistentesUnidade getEquipamentosExistentes(String[] conteudoLinha,
                                                                     Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-            Optional<EquipamentosExistentesUnidade> equipamentosExistentesUnidadeOptional = unidadeOptional
+            var equipamentosExistentesUnidadeOptional = unidadeOptional
                     .map(UnidadeEnsino::getEquipamentosExistentesUnidade)
                     .filter(Objects::nonNull)
                     .stream()
@@ -390,8 +388,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private RecursoPessoasDeficientes getRecursosPessoasDeficientes(String[] conteudoLinha,
                                                                     Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-            Optional<RecursoPessoasDeficientes> recursoPessoasDeficientes = unidadeOptional
+            var recursoPessoasDeficientes = unidadeOptional
                     .map(UnidadeEnsino::getRecursoPessoasDeficientes)
                     .filter(Objects::nonNull)
                     .stream()
@@ -423,7 +420,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
 
     private DependenciasFisicas getDependenciasFisicas(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<DependenciasFisicas> dependenciasFisicasOptional = unidadeOptional
+            var dependenciasFisicasOptional = unidadeOptional
                     .map(UnidadeEnsino::getDependenciasFisicas)
                     .filter(Objects::nonNull)
                     .stream()
@@ -480,7 +477,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                                              Optional<UnidadeEnsino> unidadeOptional) {
         try {
 
-            Optional<TratamentoLixo> tratamentoLixoOptional = unidadeOptional
+            var tratamentoLixoOptional = unidadeOptional
                     .map(UnidadeEnsino::getTratamentoLixo)
                     .filter(Objects::nonNull)
                     .stream()
@@ -502,7 +499,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
 
     private DestinacaoLixo getDestinacaoLixo(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<DestinacaoLixo> destinacaoLixoOptional = unidadeOptional
+            var destinacaoLixoOptional = unidadeOptional
                     .map(UnidadeEnsino::getDestinacaoLixo)
                     .filter(Objects::nonNull)
                     .stream()
@@ -526,7 +523,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private EsgotamentoSanitario getEsgotamentoSanitario(String[] conteudoLinha,
                                                          Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<EsgotamentoSanitario> esgotamentoSanitarioOptional = unidadeOptional
+            var esgotamentoSanitarioOptional = unidadeOptional
                     .map(UnidadeEnsino::getEsgotamentoSanitario)
                     .filter(Objects::nonNull)
                     .stream()
@@ -549,7 +546,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private FonteEnergiaEletrica getFonteEnergiaEletrica(String[] conteudoLinha,
                                                          Optional<UnidadeEnsino> unidadeOptional) {
         try {
-            Optional<FonteEnergiaEletrica> fonteEnergiaEletricaOptional = unidadeOptional
+            var fonteEnergiaEletricaOptional = unidadeOptional
                     .map(UnidadeEnsino::getFonteEnergiaEletrica)
                     .filter(Objects::nonNull)
                     .stream()
@@ -572,9 +569,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private AbastecimentoAgua getAbastecimentoAgua(String[] conteudoLinha,
                                                    Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-
-            Optional<AbastecimentoAgua> abastecimentoAguaOptional = unidadeOptional
+            var abastecimentoAguaOptional = unidadeOptional
                     .map(UnidadeEnsino::getAbastecimentoAgua)
                     .filter(Objects::nonNull)
                     .stream()
@@ -598,8 +593,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     private EscolasComQualCompartilha getEscolaComQualCompartilha(String[] conteudoLinha,
                                                                   Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-            Optional<EscolasComQualCompartilha> escolasComQualCompartilhaOptional = unidadeOptional
+            var escolasComQualCompartilhaOptional = unidadeOptional
                     .map(UnidadeEnsino::getEscolasComQualCompartilha)
                     .filter(Objects::nonNull)
                     .stream()
@@ -628,8 +622,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
 
     private LocalFuncionamentoEscola getLocalFuncionamentoEscola(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeOptional) {
         try {
-
-            Optional<LocalFuncionamentoEscola> localFuncionamentoUnidadeConsultada = unidadeOptional
+            var localFuncionamentoUnidadeConsultada = unidadeOptional
                     .map(UnidadeEnsino::getLocalFuncionamentoEscola)
                     .filter(Objects::nonNull)
                     .stream()

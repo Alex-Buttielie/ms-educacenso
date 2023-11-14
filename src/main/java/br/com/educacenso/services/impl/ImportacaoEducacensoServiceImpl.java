@@ -2,13 +2,12 @@ package br.com.educacenso.services.impl;
 
 import br.com.educacenso.contraints.TipoImportacaoEducacenso;
 import br.com.educacenso.contraints.TipoRegistro;
-import br.com.educacenso.utils.UtilFile;
 import br.com.educacenso.services.ExecutarImportacaoService;
 import br.com.educacenso.services.ImportacaoEducacensoService;
+import br.com.educacenso.utils.UtilFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -19,7 +18,7 @@ public class ImportacaoEducacensoServiceImpl implements ImportacaoEducacensoServ
 
     @Override
     public void importarEducacenso(MultipartFile arquivo) throws IOException {
-        BufferedReader reader = UtilFile.converterFileToBufferedReader(arquivo);
+        var reader = UtilFile.converterFileToBufferedReader(arquivo);
         String linha;
         try {
             while ((linha = reader.readLine()) != null) {

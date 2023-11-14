@@ -34,7 +34,7 @@ import static java.util.Optional.ofNullable;
 @Primary
 public class GenericPessoaImportacao extends GenericEducacensoImportacao implements GenericPessoaImportacaoService {
 
-    protected  PessoaRepository pessoaRepository;
+    protected PessoaRepository pessoaRepository;
     protected UnidadeEnsinoRepository unidadeEnsinoRepository;
 
     protected Pessoa pessoaParaSalvar;
@@ -74,7 +74,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public Pessoa salvarPessoa(Pessoa pessoaParaSalvar) {
-        Pessoa pessoa = Optional.ofNullable(pessoaParaSalvar).map(p -> pessoaRepository.save(p)).orElse(null);
+        var pessoa = Optional.ofNullable(pessoaParaSalvar).map(p -> pessoaRepository.save(p)).orElse(null);
         limparPessoaScopo();
         return pessoa;
     }
@@ -91,7 +91,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public Optional<Pessoa> rastrearPessoaCacteristicasIndiv(String[] conteudoLinha) {
-        Optional<Pessoa> pessoaRastPorCpf = rastrearPessoaCpf(conteudoLinha);
+        var pessoaRastPorCpf = rastrearPessoaCpf(conteudoLinha);
 
         if (pessoaRastPorCpf.isPresent()) {
             return pessoaRastPorCpf;
@@ -101,8 +101,8 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public Optional<Pessoa> rastrearPessoaCpf(String[] conteudoLinha) {
-        final int POSICAO_CPF = 4;
-        String cpf = ofNullable(valorString(conteudoLinha, POSICAO_CPF)).orElse("");
+        final var POSICAO_CPF = 4;
+        var cpf = ofNullable(valorString(conteudoLinha, POSICAO_CPF)).orElse("");
         return pessoaRepository.findPessoaByCpf(cpf);
     }
 
@@ -137,23 +137,12 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
                 .tipoFiliacao(getTipoFiliacao(valorString(conteudoLinha, 7)))
                 .nome(valorString(conteudoLinha, 5))
                 .nomeMae(valorString(conteudoLinha, 8))
-                // .maiorNivelEscolaridadeConcluido(getMaiorNivelEscolaridadeConcluida(valorString(conteudoLinha, 44)))
-                //.tipoEnsinoMedioCursado(getTipoEnsinoMedioCursado(valorString(conteudoLinha, 45)))
                 .numeroMatriculaCertidaoNascimento(valorString(conteudoLinha, 38))
                 .paisNacionalidade(getPais(stringToInteger(conteudoLinha, 13)))
                 .paisResidencia(getPais(stringToInteger(conteudoLinha, 39)))
                 .sexo(getSexo(stringToInteger(conteudoLinha, 10)))
-                //.tipoEnsinoMedioCursado(getTipoEnsinoMedioCursado(valorString(conteudoLinha, 45)))
                 .tipoRegistro(getTipoRegistro(valorString(conteudoLinha, 0)))
                 .enderecoEletronicoEmail("campo93naoesquecer@gmail.com")
-                //.naoTemPosGraduacaoConcluida(stringToBoolean(conteudoLinha, 76))
-                //.formacaoComplementarPedagogicaProfessor(getFormacoesComplementarPedagogicaProfessor(conteudoLinha, pessoaConsultadaOptional))
-                //.outrosCursosEspecificos(getOutrosCursosEspecificos(conteudoLinha, pessoaConsultadaOptional))
-                //.tipoDeficienciaEspectroAltasHabilidades(getTipoDeficienciaEspectroAltasHabilidades(conteudoLinha, pessoaConsultadaOptional))
-                // .recursoAlunoParaAvaliacaoInep(getRecursoAlunoParaAvaliacaoInep(conteudoLinha, pessoaConsultadaOptional))
-                //.municipioNascimento(conteudoLinha[14])
-                //.municipioResidencia(conteudoLinha[41])
-                //.posGraduacaoConcluidaProfessor(getPosGraduacoesConcluidasProfessor(conteudoLinha, pessoaConsultadaOptional))
                 .build();
 
     }

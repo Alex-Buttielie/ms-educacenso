@@ -85,8 +85,8 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
     @Override
     public Optional<Professor> importarLinhaArquivo(String[] conteudoLinha) {
-        Pessoa pessoa = salvarPessoa(atualizarDadosPessoa(conteudoLinha));
-        Professor professor = atualizarDadosProfessor(conteudoLinha, pessoa);
+        var pessoa = salvarPessoa(atualizarDadosPessoa(conteudoLinha));
+        var professor = atualizarDadosProfessor(conteudoLinha, pessoa);
         salvarPessoa(atualizarDadosPessoa(conteudoLinha));
         return Optional.of(repository.save(professor));
     }
@@ -124,7 +124,15 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
                 .formacaoComplementarPedagogicaProfessor(getFormacoesComplementarPedagogicaProfessor(conteudoLinha, professor))
                 .outrosCursosEspecificos(getOutrosCursosEspecificos(conteudoLinha, professor))
                 .tipoDeficienciaEspectroAltasHabilidades(getTipoDeficienciaEspectroAltasHabilidades(conteudoLinha, professor))
+                .maiorNivelEscolaridadeConcluido(getMaiorNivelEscolaridadeConcluida(valorString(conteudoLinha, 44)))
+                .tipoEnsinoMedioCursado(getTipoEnsinoMedioCursado(valorString(conteudoLinha, 45)))
                 .recursoAlunoParaAvaliacaoInep(getRecursoAlunoParaAvaliacaoInep(conteudoLinha, professor))
+                .posGraduacaoConcluidaProfessor(getPosGraduacoesConcluidasProfessor(conteudoLinha, professor))
+                .naoTemPosGraduacaoConcluida(stringToBoolean(conteudoLinha, 76))
+                .formacaoComplementarPedagogicaProfessor(getFormacoesComplementarPedagogicaProfessor(conteudoLinha, professor))
+                .outrosCursosEspecificos(getOutrosCursosEspecificos(conteudoLinha, professor))
+                .tipoDeficienciaEspectroAltasHabilidades(getTipoDeficienciaEspectroAltasHabilidades(conteudoLinha, professor))
+                 .recursoAlunoParaAvaliacaoInep(getRecursoAlunoParaAvaliacaoInep(conteudoLinha, professor))
                 .posGraduacaoConcluidaProfessor(getPosGraduacoesConcluidasProfessor(conteudoLinha, professor))
                 .build();
     }
@@ -137,7 +145,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
         try {
 
-            Optional<RecursoAlunoParaAvaliacaoInep> recursoAlunoParaAvaliacaoInep = professorConsultadaOptional
+            var recursoAlunoParaAvaliacaoInep = professorConsultadaOptional
                     .map(Professor::getRecursoAlunoParaAvaliacaoInep)
                     .filter(Objects::nonNull)
                     .stream()
@@ -172,7 +180,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
     public PosGraduacaoConcluidaProfessor getPosGraduacoesConcluidasProfessor(String[] conteudoLinha, Optional<Professor> professorConsultadaOptional) {
         try {
-            Optional<PosGraduacaoConcluidaProfessor> posGraduacaoConcluidaProfessorOptional = professorConsultadaOptional
+            var posGraduacaoConcluidaProfessorOptional = professorConsultadaOptional
                     .map(Professor::getPosGraduacaoConcluidaProfessor)
                     .filter(Objects::nonNull)
                     .stream()
@@ -229,8 +237,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     public OutrosCursosEspecificos getOutrosCursosEspecificos(String[] conteudoLinha, Optional<Professor> professorConsultadaOptional) {
         try {
 
-            Optional<OutrosCursosEspecificos> outrosCursosEspecificosOptional;
-            outrosCursosEspecificosOptional = professorConsultadaOptional
+            var outrosCursosEspecificosOptional = professorConsultadaOptional
                     .map(Professor::getOutrosCursosEspecificos)
                     .filter(Objects::nonNull)
                     .stream()
@@ -266,7 +273,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     public FormacaoComplementarPedagogicaProfessor getFormacoesComplementarPedagogicaProfessor(String[] conteudoLinha,
                                                                                                Optional<Professor> professorConsultadoOptional) {
         try {
-            Optional<FormacaoComplementarPedagogicaProfessor> formacaoComplementarPedagogicaProfessorOptional = professorConsultadoOptional
+            var formacaoComplementarPedagogicaProfessorOptional = professorConsultadoOptional
                     .map(Professor::getFormacaoComplementarPedagogicaProfessor)
                     .filter(Objects::nonNull)
                     .stream()
@@ -288,7 +295,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
     public TipoDeficienciaEspectroAltasHabilidades getTipoDeficienciaEspectroAltasHabilidades(String[] conteudoLinha, Optional<Professor> professorConsultadoOptional) {
         try {
-            Optional<TipoDeficienciaEspectroAltasHabilidades> tipoDeficienciaEspectroAltasHabilidadesOptional = professorConsultadoOptional
+            var tipoDeficienciaEspectroAltasHabilidadesOptional = professorConsultadoOptional
                     .map(Professor::getTipoDeficienciaEspectroAltasHabilidades)
                     .filter(Objects::nonNull)
                     .stream()
