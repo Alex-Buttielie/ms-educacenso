@@ -1,5 +1,4 @@
 HELP.md
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -8,7 +7,6 @@ target/
 /educacao/HELP.md
 /educacao/mvnw
 /educacao/mvnw.cmd
-/target/
 
 educacenso.iml
 
