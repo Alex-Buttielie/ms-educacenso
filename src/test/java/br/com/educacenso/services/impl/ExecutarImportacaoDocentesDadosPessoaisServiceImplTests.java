@@ -107,7 +107,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
                 .rastrearPessoaCacteristicasIndiv(dadosPessoaStr).orElse(null);
 
-        assertEquals(pessoaRastreada);
+        assertNotNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), dadosPessoa.getNome());
         assertEquals(pessoaRastreada.getCpf(), dadosPessoa.getCpf());
     }
