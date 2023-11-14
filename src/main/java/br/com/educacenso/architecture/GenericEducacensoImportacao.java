@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import static java.util.Optional.ofNullable;
 
-public abstract class GenericEducacensoImportacao {
+public abstract class  GenericEducacensoImportacao {
 
     public static Date stringToDate(String[] conteudoLinha, int posicaoConteudo) {
         try {

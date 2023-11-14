@@ -9,17 +9,13 @@ import br.com.educacenso.contraints.Paises;
 import br.com.educacenso.contraints.TipoRegistro;
 import br.com.educacenso.repositories.PessoaRepository;
 import br.com.educacenso.repositories.UnidadeEnsinoRepository;
-import br.com.educacenso.services.GenericPessoaImportacaoService;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -29,26 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@MockBeans({
-        @MockBean(PessoaRepository.class),
-        @MockBean(UnidadeEnsinoRepository.class)
-})
-public class GenericPessoaEducationTest {
+@ExtendWith(MockitoExtension.class)
+public class GenericPessoaImportacaoTest {
 
-    @TestConfiguration
-    static class Configuracao {
-        @Bean
-        public GenericPessoaImportacaoService genericPessoaImportacaoService() {
-            return new GenericPessoaImportacao();
-        }
-    }
-
-    @MockBean
-    private GenericPessoaImportacaoService genericPessoaImportacaoService;
-    @MockBean
+    @InjectMocks
+    private GenericPessoaImportacao genericPessoaImportacaoService;
+    @Mock
     protected PessoaRepository pessoaRepository;
-    @MockBean
+    @Mock
     protected UnidadeEnsinoRepository unidadeEnsinoRepository;
     @Mock
     protected Pessoa pessoaParaSalvar;
@@ -59,6 +43,12 @@ public class GenericPessoaEducationTest {
             "","","","","","","","","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"};
 
     private final String[] DADOS_PESSOA_VAZIO_STR = {};
+
+    @Before
+    public void setUp() {
+        pessoaParaSalvar = new Pessoa();
+    }
+
 
     @Test
     public void devebuscarCorRaca() {
