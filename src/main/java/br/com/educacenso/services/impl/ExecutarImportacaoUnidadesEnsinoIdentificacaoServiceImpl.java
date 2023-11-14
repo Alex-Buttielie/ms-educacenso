@@ -3,7 +3,7 @@ package br.com.educacenso.services.impl;
 import br.com.educacenso.services.ExecutarImportacaoUnidadesEnsinoIdentificacaoService;
 import br.com.educacenso.app.domains.UnidadeEnsino;
 import br.com.educacenso.repositories.UnidadeEnsinoRepository;
-import br.com.educacenso.architecture.GenericEducation;
+import br.com.educacenso.architecture.GenericEducacensoImportacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Qualifier("unidadeEnsinoIndentificacao")
 @Component
 public class ExecutarImportacaoUnidadesEnsinoIdentificacaoServiceImpl
-        extends GenericEducation
+        extends GenericEducacensoImportacao
         implements ExecutarImportacaoUnidadesEnsinoIdentificacaoService {
 
     @Autowired

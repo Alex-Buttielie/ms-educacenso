@@ -56,4 +56,12 @@ public class Professor {
     @Basic
     @Column(name = "maior_nivel_escolaridade_concluido")
     private MaiorNivelEscolaridadeConcluido maiorNivelEscolaridadeConcluido;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private TipoDeficienciaEspectroAltasHabilidades tipoDeficienciaEspectroAltasHabilidades;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private RecursoAlunoParaAvaliacaoInep recursoAlunoParaAvaliacaoInep;
 }

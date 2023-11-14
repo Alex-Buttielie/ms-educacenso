@@ -69,57 +69,49 @@ public enum TipoImportacaoEducacenso {
     DOCENTE_DADOS_PESSOAS() {
         @Override
         public ExecutarImportacaoDocentesDadosPessoaisService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     DOCENTE_COMPLEMENTAR_1 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     DOCENTE_COMPLEMENTAR_2 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     DOCENTE_COMPLEMENTAR_3 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     DOCENTE_COMPLEMENTAR_4 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     ALUNO_COMPLEMENTAR_1 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     ALUNO_COMPLEMENTAR_2 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     },
     ALUNO_COMPLEMENTAR_3 {
         @Override
         public ExecutarImportacaoService getTipoImportacao() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository, this.unidadeEnsinoRepository,
-                    this.areaConhecimentoRepository, this.areaPosGraduacaoRepository);
+            return newExecutarImportacaoDocentesDadosPessoaisServiceImpl();
         }
     };
 
@@ -156,6 +148,18 @@ public enum TipoImportacaoEducacenso {
     protected QuantidadeComputadoresEmUsoAlunosRepository quantidadeComputadoresEmUsoAlunosRepository;
 
     public abstract ExecutarImportacaoService getTipoImportacao();
+
+    ExecutarImportacaoDocentesDadosPessoaisServiceImpl newExecutarImportacaoDocentesDadosPessoaisServiceImpl() {
+        return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository,
+                this.unidadeEnsinoRepository,
+                this.areaConhecimentoRepository,
+                this.areaPosGraduacaoRepository,
+                this.formacaoComplementarPedagogicaProfessorRepository,
+                this.tipoDeficienciaEspectroAltasHabilidadesRepository,
+                this.outrosCursosEspecificosRepository,
+                this.recursoAlunoParaAvaliacaoInepRepository,
+                this.posGraduacaoConcluidaProfessorRepository);
+    }
 
     private void setPessoaRepository(PessoaRepository pessoaRepository) {
         this.pessoaRepository = pessoaRepository;
