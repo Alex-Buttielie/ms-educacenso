@@ -76,7 +76,6 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
         when(pessoaRepository.save(any())).thenReturn(pessoa);
         when(professorRepository.findProfessorByPessoa(any())).thenReturn(professor);
-
         executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(NOVOS_DADOS_PESSOA);
     }
 
@@ -98,8 +97,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveRastrearPessoaCacteristicasIndiv() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
 
-        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
+        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
 
         assertNotNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), pessoa.getNome());
@@ -110,8 +108,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveRastrearPessoaCpf() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
 
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
 
         assertEquals(pessoaRastreada.isPresent(), TRUE);
 
@@ -121,14 +118,11 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveRastrearPessoaNome() {
         when(pessoaRepository.findPessoaByNome(pessoa.getNome())).thenReturn(Optional.of(pessoa));
 
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
-                .rastrearPessoaNome(NOVOS_DADOS_PESSOA);
+        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
 
         assertEquals(pessoaRastreada.isPresent(), TRUE);
 
     }
-
-
 
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
