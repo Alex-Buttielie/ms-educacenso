@@ -47,7 +47,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveAtualizarDadosPessoa() {
-        Pessoa pessoaAtualizada = genericPessoaImportacaoService.atualizarDadosPessoa(NOVOS_DADOS_PESSOA);
+        var pessoaAtualizada = genericPessoaImportacaoService.atualizarDadosPessoa(NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaAtualizada);
         assertNotNull(pessoaAtualizada.getTipoRegistro());
         assertEquals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO, pessoaAtualizada.getTipoRegistro());
@@ -57,7 +57,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveAtualizarDadosPessoaConsultada() {
-        Pessoa pessoaConsulta = genericPessoaImportacaoService.atualizarDadosPessoaConsultada(Optional.of(pessoa), NOVOS_DADOS_PESSOA);
+        var pessoaConsulta = genericPessoaImportacaoService.atualizarDadosPessoaConsultada(Optional.of(pessoa), NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaConsulta);
         assertNotNull(pessoaConsulta.getId());
         assertEquals(pessoaConsulta.getId(), pessoa.getId());
@@ -65,8 +65,8 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveAtualizarDadosPessoaNaoConsultada() {
-        Pessoa pessoaConsulta = genericPessoaImportacaoService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
-        Pessoa pessoaConsultaDadosPreenchidos = genericPessoaImportacaoService.atualizarDadosPessoaNaoConsultada(NOVOS_DADOS_PESSOA);
+        var pessoaConsulta = genericPessoaImportacaoService.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
+        var pessoaConsultaDadosPreenchidos = genericPessoaImportacaoService.atualizarDadosPessoaNaoConsultada(NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaConsulta);
         assertNotNull(pessoaConsultaDadosPreenchidos);
     }

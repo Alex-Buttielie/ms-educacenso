@@ -9,7 +9,6 @@ import br.com.educacenso.app.constraints.TipoFiliacao;
 import br.com.educacenso.app.domains.Pessoa;
 import br.com.educacenso.app.domains.Professor;
 import br.com.educacenso.app.domains.RecursoAlunoParaAvaliacaoInep;
-import br.com.educacenso.app.domains.TipoDeficienciaEspectroAltasHabilidades;
 import br.com.educacenso.repositories.AreaConhecimentoRepository;
 import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
 import br.com.educacenso.repositories.PessoaRepository;
@@ -65,7 +64,6 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
                 null,null, professorRepository);
     }
 
-
     @Test
     public void naoDeveTestarImportarLinha(){
         assertThrows(Exception.class, ()-> executarImportacaoDocentesDadosPessoaisService.importarLinhaArquivo(null));
@@ -83,14 +81,14 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
 
     @Test
     public void deveBuscarMaiorNivelEscolaridadeConcluida() {
-        final String CODIGO_NIVEL = MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO.getDescricao();
+        final var CODIGO_NIVEL = MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO.getDescricao();
         MaiorNivelEscolaridadeConcluido nivel = executarImportacaoDocentesDadosPessoaisService.getMaiorNivelEscolaridadeConcluida(CODIGO_NIVEL);
         assertEquals( MaiorNivelEscolaridadeConcluido.ENSINO_MEDIO, nivel);
     }
 
     @Test
     public void deveBuscarTipoEnsinoMedioCursado() {
-        final String CODIGO_ENSINO_MEDIO_CURSADO = TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO.getCodigoEducacenso();
+        final var CODIGO_ENSINO_MEDIO_CURSADO = TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO.getCodigoEducacenso();
         TipoEnsinoMedioCursado ensinoMedioCursado = executarImportacaoDocentesDadosPessoaisService.getTipoEnsinoMedioCursado(CODIGO_ENSINO_MEDIO_CURSADO);
         assertEquals(TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO, ensinoMedioCursado);
     }
@@ -98,9 +96,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     @Test
     public void deveRastrearPessoaCacteristicasIndiv() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
-
-        Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
-
+        var pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
         assertNotNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), pessoa.getNome());
         assertEquals(pessoaRastreada.getCpf(), pessoa.getCpf());
@@ -109,19 +105,14 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     @Test
     public void deveRastrearPessoaCpf() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
-
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
-
+        var pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
         assertEquals(TRUE, pessoaRastreada.isPresent());
-
     }
 
     @Test
     public void deveRastrearPessoaNome() {
         when(pessoaRepository.findPessoaByNome(pessoa.getNome())).thenReturn(Optional.of(pessoa));
-
-        Optional<Pessoa> pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
-
+        var pessoaRastreada = executarImportacaoDocentesDadosPessoaisService.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
         assertEquals(TRUE, pessoaRastreada.isPresent());
 
     }
@@ -129,17 +120,14 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
         var localizacaoDiferenciadaResidencia = LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO.getValor();
-
-        var localizacao = executarImportacaoDocentesDadosPessoaisService
-                .getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia);
-
+        var localizacao = executarImportacaoDocentesDadosPessoaisService.getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia);
         assertEquals(localizacao.getValor(), localizacaoDiferenciadaResidencia);
     }
 
     @Test
     public void deveBuscarNacionalidadeCorreta() {
         final String CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getCodigoEducacenso();
-        Nacionalidade nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
+        var nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
         assertEquals( Nacionalidade.BRASILEIRA, nacionalidade);
     }
 
@@ -147,12 +135,12 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
     public void deveBuscarRecursoAlunoParaAvaliacaoInep() {
         RecursoAlunoParaAvaliacaoInep recurso = RecursoAlunoParaAvaliacaoInep.builder().auxilioLedor(true).build();
 
-        Professor professor = Professor.builder()
+        var professor = Professor.builder()
                 .id(1l)
                 .recursoAlunoParaAvaliacaoInep(recurso)
                 .build();
 
-        Professor professoSemId = Professor.builder()
+        var professoSemId = Professor.builder()
                 .recursoAlunoParaAvaliacaoInep(recurso)
                 .build();
 
@@ -165,20 +153,19 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
 
     @Test
     public void deveBuscarTipoFiliacao() {
-        TipoFiliacao tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(TipoFiliacao.FILIACAO_1_OU_2.getValor());
+        var tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(TipoFiliacao.FILIACAO_1_OU_2.getValor());
         assertEquals( TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
     @Test
     public void naoDeveBuscarTipoDeficienciaEspectroAltasHabilidades() {
-        TipoDeficienciaEspectroAltasHabilidades tipoDeficienciaEspectroAltasHabilidades = executarImportacaoDocentesDadosPessoaisService
-                .getTipoDeficienciaEspectroAltasHabilidades(NOVOS_DADOS_PESSOA, professor);
+        var tipoDeficienciaEspectroAltasHabilidades = executarImportacaoDocentesDadosPessoaisService.getTipoDeficienciaEspectroAltasHabilidades(NOVOS_DADOS_PESSOA, professor);
         assertNotNull(tipoDeficienciaEspectroAltasHabilidades);
     }
 
     @Test
     public void deveBuscarDadosPessoaNaLinha() {
-        Pessoa pessoaConsultada = executarImportacaoDocentesDadosPessoaisService.getDadosPessoaNaLinha(NOVOS_DADOS_PESSOA, Optional.ofNullable(pessoa));
+        var pessoaConsultada = executarImportacaoDocentesDadosPessoaisService.getDadosPessoaNaLinha(NOVOS_DADOS_PESSOA, Optional.ofNullable(pessoa));
         assertNotNull(pessoaConsultada);
     }
 
