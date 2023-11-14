@@ -9,24 +9,14 @@ import br.com.educacenso.app.domains.AreaConhecimento;
 import br.com.educacenso.app.domains.Pessoa;
 import br.com.educacenso.app.domains.TipoDeficienciaEspectroAltasHabilidades;
 import br.com.educacenso.repositories.AreaConhecimentoRepository;
-import br.com.educacenso.repositories.AreaPosGraduacaoRepository;
-import br.com.educacenso.repositories.FormacaoComplementarPedagogicaProfessorRepository;
-import br.com.educacenso.repositories.OutrosCursosEspecificosRepository;
 import br.com.educacenso.repositories.PessoaRepository;
-import br.com.educacenso.repositories.PosGraduacaoConcluidaProfessorRepository;
-import br.com.educacenso.repositories.RecursoAlunoParaAvaliacaoInepRepository;
-import br.com.educacenso.repositories.TipoDeficienciaEspectroAltasHabilidadesRepository;
 import br.com.educacenso.repositories.UnidadeEnsinoRepository;
-import br.com.educacenso.services.ExecutarImportacaoDocentesDadosPessoaisService;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -36,35 +26,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@MockBeans({
-        @MockBean(UnidadeEnsinoRepository.class),
-        @MockBean(AreaConhecimentoRepository.class),
-        @MockBean(AreaPosGraduacaoRepository.class),
-        @MockBean(FormacaoComplementarPedagogicaProfessorRepository.class),
-        @MockBean(TipoDeficienciaEspectroAltasHabilidadesRepository.class),
-        @MockBean(OutrosCursosEspecificosRepository.class),
-        @MockBean(RecursoAlunoParaAvaliacaoInepRepository.class),
-        @MockBean(PosGraduacaoConcluidaProfessorRepository.class),
-        @MockBean(PessoaRepository.class)
-})
-public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
+@ExtendWith(MockitoExtension.class)
+public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest {
 
-    @TestConfiguration
-    static class Configuracao {
-        @Bean
-        public ExecutarImportacaoDocentesDadosPessoaisService executarImportacaoDocentesDadosPessoaisService() {
-            return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl();
-        }
-    }
-
-    @MockBean
+    @Mock
     private PessoaRepository pessoaRepository;
-    @MockBean
+    @Mock
     private AreaConhecimentoRepository areaConhecimentoRepository;
-    @MockBean
-    private ExecutarImportacaoDocentesDadosPessoaisService executarImportacaoDocentesDadosPessoaisService;
-    @MockBean
+    @InjectMocks
+    private ExecutarImportacaoDocentesDadosPessoaisServiceImpl executarImportacaoDocentesDadosPessoaisService;
+    @Mock
     private UnidadeEnsinoRepository unidadeEnsinoRepository;
     @Mock
     private Pessoa pessoa;
