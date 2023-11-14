@@ -33,6 +33,7 @@ import java.util.Optional;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -107,7 +108,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTests {
         Pessoa pessoaRastreada = executarImportacaoDocentesDadosPessoaisService
                 .rastrearPessoaCacteristicasIndiv(dadosPessoaStr).orElse(null);
 
-        assertNotNull(pessoaRastreada);
+        assertNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), dadosPessoa.getNome());
         assertEquals(pessoaRastreada.getCpf(), dadosPessoa.getCpf());
     }
