@@ -25,8 +25,8 @@ public class ExecutarImportacaoUnidadesEnsinoIdentificacaoServiceImpl
     }
 
     @Override
-    public void importarLinhaArquivo(String[] conteudoLinha) {
-        salvarDadosUnidadeEnsino(atualizarDadosUnidadeEnsino(conteudoLinha));
+    public Optional<UnidadeEnsino> importarLinhaArquivo(String[] conteudoLinha) {
+        return Optional.of(salvarDadosUnidadeEnsino(atualizarDadosUnidadeEnsino(conteudoLinha)));
     }
 
     private UnidadeEnsino getDadosDaUnidadeEnsinoNaLinha(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeEnsinoConsultadaOptional) {
@@ -51,8 +51,7 @@ public class ExecutarImportacaoUnidadesEnsinoIdentificacaoServiceImpl
 
     private UnidadeEnsino atualizarDadosUnidadeEnsinoConsultada(Optional<UnidadeEnsino> unidadeEnsino,
                                                                 String[] conteudoLinha) {
-        UnidadeEnsino unidadeEnsinoAtualizada = getDadosDaUnidadeEnsinoNaLinha(conteudoLinha, unidadeEnsino);
-        return unidadeEnsinoAtualizada;
+        return getDadosDaUnidadeEnsinoNaLinha(conteudoLinha, unidadeEnsino);
     }
 
 }

@@ -55,12 +55,12 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
 
 
     @Override
-    public void importarLinhaArquivo(String[] conteudoLinha) {
-        salvarDadosUnidadeEnsino(atualizarDadosUnidadeEnsino(conteudoLinha));
+    public Optional<UnidadeEnsino> importarLinhaArquivo(String[] conteudoLinha) {
+        return Optional.of(salvarDadosUnidadeEnsino(atualizarDadosUnidadeEnsino(conteudoLinha)));
     }
 
     private UnidadeEnsino getDadosDaUnidadeEnsinoNaLinha(String[] conteudoLinha, Optional<UnidadeEnsino> unidadeOptional) {
-        return new UnidadeEnsino()
+        return  UnidadeEnsino
                 .builder()
                 .tipoDeRegistro(getTipoRegistro(valorString(conteudoLinha, 0)))
                 .codigoInep(stringToLong(conteudoLinha, 1))
@@ -98,7 +98,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new OrgaosColegiadosFuncionamentoEscola()
+            return  OrgaosColegiadosFuncionamentoEscola
                     .builder()
                     .id(orgaosColegiadosFuncionamentoEscola.map(OrgaosColegiadosFuncionamentoEscola::getId).orElse(null))
                     .associacaoPais(stringToBoolean(conteudoLinha, 161))
@@ -125,7 +125,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new ReservaVagasSistemaCotas()
+            return  ReservaVagasSistemaCotas
                     .builder()
                     .id(reservaVagasSistemaCotasOptional.map(ReservaVagasSistemaCotas::getId).orElse(null))
                     .autoDeclaradoPretoPardoOuIndigena(stringToBoolean(conteudoLinha, 152))
@@ -152,7 +152,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new IdiomaEnsino()
+            return  IdiomaEnsino
                     .builder()
                     .id(idiomaEnsinoOptional.map(IdiomaEnsino::getId).orElse(null))
                     .linguaIndigena(stringToBoolean(conteudoLinha, 146))
@@ -183,7 +183,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new InstrumentosMateriaisSocioCulturais()
+            return  InstrumentosMateriaisSocioCulturais
                     .builder()
                     .id(instrumentosMateriaisSocioCulturais.map(InstrumentosMateriaisSocioCulturais::getId).orElse(null))
                     .acervoMultimidia(stringToBoolean(conteudoLinha, 132))
@@ -217,7 +217,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new TotalProfissionaisAtivosEscola()
+            return  TotalProfissionaisAtivosEscola
                     .builder()
                     .id(totalProfissionaisAtivosEscolaOptional.map(TotalProfissionaisAtivosEscola::getId).orElse(null))
                     .auxiliaresSecretaria(stringToInteger(conteudoLinha, 115))
@@ -253,7 +253,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return  new RedeLocalInterligacaoComputadores()
+            return   RedeLocalInterligacaoComputadores
                     .builder()
                     .id(redeLocalInterligacaoComputadoresOptional.map(RedeLocalInterligacaoComputadores::getId).orElse(null))
                     .cabo(stringToBoolean(conteudoLinha, 112))
@@ -276,7 +276,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new EquipamentosUsadosAlunosAcessoInternet()
+            return  EquipamentosUsadosAlunosAcessoInternet
                     .builder()
                     .id(equipamentosUsadosAlunosAcessoInternetOptional.map(EquipamentosUsadosAlunosAcessoInternet::getId).orElse(null))
                     .computadoresTabletsBibliotecaUnidade(stringToBoolean(conteudoLinha, 109))
@@ -299,7 +299,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new AcessoInternet()
+            return  AcessoInternet
                     .builder()
                     .id(acessoInternetOptional.map(AcessoInternet::getId).orElse(null))
                     .paraUsoAdministrativo(stringToBoolean(conteudoLinha, 104))
@@ -323,7 +323,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new QuantidadeComputadoresEmUsoAlunos()
+            return  QuantidadeComputadoresEmUsoAlunos
                     .builder()
                     .id(quantidadeComputadoresEmUsoAlunosOptional.map(QuantidadeComputadoresEmUsoAlunos::getId).orElse(null))
                     .computadoresMesaDesktop(stringToLong(conteudoLinha, 101))
@@ -345,7 +345,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new QuantidadeEquipamentosProcessoAprendizagem()
+            return  QuantidadeEquipamentosProcessoAprendizagem
                     .builder()
                     .id(quantidadeEquipamentosProcessoAprendizagemOptional.map(QuantidadeEquipamentosProcessoAprendizagem::getId).orElse(null))
                     .aparelhoDvdBluray(stringToInteger(conteudoLinha, 96))
@@ -370,7 +370,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new EquipamentosExistentesUnidade()
+            return  EquipamentosExistentesUnidade
                     .builder()
                     .id(equipamentosExistentesUnidadeOptional.map(EquipamentosExistentesUnidade::getId).orElse(null))
                     .antenaParabolica(stringToBoolean(conteudoLinha, 89))
@@ -397,7 +397,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new RecursoPessoasDeficientes()
+            return  RecursoPessoasDeficientes
                     .builder()
                     .id(recursoPessoasDeficientes.map(RecursoPessoasDeficientes::getId).orElse(null))
                     .corrimaoGuardaCorpos(stringToBoolean(conteudoLinha, 76))
@@ -429,7 +429,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new DependenciasFisicas()
+            return  DependenciasFisicas
                     .builder()
                     .id(dependenciasFisicasOptional.map(DependenciasFisicas::getId).orElse(null))
                     .almoxarifado(stringToBoolean(conteudoLinha, 39))
@@ -486,7 +486,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new TratamentoLixo()
+            return  TratamentoLixo
                     .builder()
                     .id(tratamentoLixoOptional.map(TratamentoLixo::getId).orElse(null))
                     .separacaoDoLixoResiduos(stringToBoolean(conteudoLinha, 35))
@@ -508,7 +508,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new DestinacaoLixo()
+            return  DestinacaoLixo
                     .builder()
                     .id(destinacaoLixoOptional.map(DestinacaoLixo::getId).orElse(null))
                     .servicoColeta(stringToBoolean(conteudoLinha, 30))
@@ -532,7 +532,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new EsgotamentoSanitario()
+            return  EsgotamentoSanitario
                     .builder()
                     .id(esgotamentoSanitarioOptional.map(EsgotamentoSanitario::getId).orElse(null))
                     .redePublica(stringToBoolean(conteudoLinha, 26))
@@ -555,7 +555,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new FonteEnergiaEletrica()
+            return  FonteEnergiaEletrica
                     .builder()
                     .id(fonteEnergiaEletricaOptional.map(FonteEnergiaEletrica::getId).orElse(null))
                     .redePublica(stringToBoolean(conteudoLinha, 22))
@@ -580,7 +580,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new AbastecimentoAgua()
+            return  AbastecimentoAgua
                     .builder()
                     .id(abastecimentoAguaOptional.map(AbastecimentoAgua::getId).orElse(null))
                     .redePublica(stringToBoolean(conteudoLinha, 17))
@@ -605,7 +605,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new EscolasComQualCompartilha()
+            return  EscolasComQualCompartilha
                     .builder()
                     .id(escolasComQualCompartilhaOptional.map(EscolasComQualCompartilha::getId).orElse(null))
                     .codigoEscolaComQualCompartilha1(getUnidadeEnsinoPeloCodigoInep(stringToLong(conteudoLinha, 10)))
@@ -635,7 +635,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .stream()
                     .findAny();
 
-            return new LocalFuncionamentoEscola()
+            return  LocalFuncionamentoEscola
                     .builder()
                     .id(localFuncionamentoUnidadeConsultada.map(LocalFuncionamentoEscola::getId).orElse(null))
                     .predioEscolar(stringToBoolean(conteudoLinha, 2))

@@ -1,6 +1,5 @@
 package br.com.educacenso.app.domains;
 
-import br.com.educacenso.app.domains.CriterioAvaliacao;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
