@@ -1,17 +1,17 @@
-package br.com.educacenso.app;
+package br.com.educacenso.app.services.impl;
 
 import br.com.educacenso.app.constraints.CorRaca;
 import br.com.educacenso.app.constraints.LocalizacaoDiferenciadaResidencia;
 import br.com.educacenso.app.constraints.LocalizacaoZonaResidencia;
 import br.com.educacenso.app.constraints.Nacionalidade;
+import br.com.educacenso.app.constraints.Paises;
 import br.com.educacenso.app.constraints.Sexo;
 import br.com.educacenso.app.constraints.TipoFiliacao;
 import br.com.educacenso.app.domains.Pessoa;
-import br.com.educacenso.architecture.GenericEducacensoImportacao;
-import br.com.educacenso.app.constraints.Paises;
 import br.com.educacenso.app.repositories.PessoaRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.app.services.GenericPessoaImportacaoService;
+import br.com.educacenso.architecture.GenericEducacensoImportacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ import static java.util.Optional.ofNullable;
 
 @Component
 @Primary
-public class GenericPessoaImportacao extends GenericEducacensoImportacao implements GenericPessoaImportacaoService {
+public class GenericServicePessoaImportacao extends GenericEducacensoImportacao implements GenericPessoaImportacaoService {
 
     protected PessoaRepository pessoaRepository;
     protected UnidadeEnsinoRepository unidadeEnsinoRepository;
@@ -40,8 +40,8 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     protected Pessoa pessoaParaSalvar;
 
     @Autowired
-    protected GenericPessoaImportacao(final PessoaRepository pessoaRepository,
-                                      final UnidadeEnsinoRepository unidadeEnsinoRepository) {
+    protected GenericServicePessoaImportacao(final PessoaRepository pessoaRepository,
+                                             final UnidadeEnsinoRepository unidadeEnsinoRepository) {
         this.pessoaRepository = pessoaRepository;
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
     }

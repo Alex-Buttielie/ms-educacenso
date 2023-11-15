@@ -1,6 +1,5 @@
 package br.com.educacenso.app.services.impl;
 
-import br.com.educacenso.app.GenericPessoaImportacao;
 import br.com.educacenso.app.constraints.MaiorNivelEscolaridadeConcluido;
 import br.com.educacenso.app.constraints.TipoEnsinoMedioCursado;
 import br.com.educacenso.app.constraints.TipoPosGraduacao;
@@ -42,8 +41,8 @@ import static java.util.Optional.ofNullable;
  */
 @Qualifier("docenteDadosPessoais")
 @Service
-public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
-        extends GenericPessoaImportacao
+public class ExecutarImportacaoDocentesDadosPessoaisServiceImplService
+        extends GenericServicePessoaImportacao
         implements ExecutarImportacaoDocentesDadosPessoaisService {
 
     protected ProfessorRepository repository;
@@ -61,16 +60,16 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     protected PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository;
 
     @Autowired
-    public ExecutarImportacaoDocentesDadosPessoaisServiceImpl(PessoaRepository pessoaRepository,
-                                                              UnidadeEnsinoRepository unidadeEnsinoRepository,
-                                                              AreaConhecimentoRepository areaConhecimentoRepository,
-                                                              AreaPosGraduacaoRepository areaPosGraduacaoRepository,
-                                                              FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository,
-                                                              TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository,
-                                                              OutrosCursosEspecificosRepository outrosCursosEspecificosRepository,
-                                                              RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository,
-                                                              PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository,
-                                                              ProfessorRepository professorRepository) {
+    public ExecutarImportacaoDocentesDadosPessoaisServiceImplService(PessoaRepository pessoaRepository,
+                                                                     UnidadeEnsinoRepository unidadeEnsinoRepository,
+                                                                     AreaConhecimentoRepository areaConhecimentoRepository,
+                                                                     AreaPosGraduacaoRepository areaPosGraduacaoRepository,
+                                                                     FormacaoComplementarPedagogicaProfessorRepository formacaoComplementarPedagogicaProfessorRepository,
+                                                                     TipoDeficienciaEspectroAltasHabilidadesRepository tipoDeficienciaEspectroAltasHabilidadesRepository,
+                                                                     OutrosCursosEspecificosRepository outrosCursosEspecificosRepository,
+                                                                     RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository,
+                                                                     PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository,
+                                                                     ProfessorRepository professorRepository) {
         super(pessoaRepository,unidadeEnsinoRepository);
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
         this.areaConhecimentoRepository = areaConhecimentoRepository;

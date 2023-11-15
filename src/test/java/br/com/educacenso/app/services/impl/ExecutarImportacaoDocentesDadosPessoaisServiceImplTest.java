@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends EducacensoApplicationTest {
 
     @InjectMocks
-    private ExecutarImportacaoDocentesDadosPessoaisServiceImpl executarImportacaoDocentesDadosPessoaisService;
+    private ExecutarImportacaoDocentesDadosPessoaisServiceImplService executarImportacaoDocentesDadosPessoaisService;
     @Mock
     private PessoaRepository pessoaRepository;
     @Mock
@@ -59,7 +59,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Educ
         professor = Optional.of(new Professor().builder().id(1l)
                 .build());
 
-        executarImportacaoDocentesDadosPessoaisService = new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(pessoaRepository, unidadeEnsinoRepository, areaConhecimentoRepository,
+        executarImportacaoDocentesDadosPessoaisService = new ExecutarImportacaoDocentesDadosPessoaisServiceImplService(pessoaRepository, unidadeEnsinoRepository, areaConhecimentoRepository,
                 areaPosGraduacaoRepository, null,
                 null, null,
                 null,null, professorRepository);
