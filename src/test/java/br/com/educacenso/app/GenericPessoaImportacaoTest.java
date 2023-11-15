@@ -52,7 +52,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
         assertNotNull(pessoaAtualizada.getTipoRegistro());
         assertEquals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO, pessoaAtualizada.getTipoRegistro());
         assertEquals(Paises.ESPANHA.getValor(), pessoaAtualizada.getPaisNacionalidade().getValor());
-        assertEquals(Nacionalidade.BRASILEIRA_NASCIDO_EXTERIOR_OU_NATURALIZADO, pessoaAtualizada.getNacionalidade());
+        assertEquals(Nacionalidade.EXTRANGEIIRO, pessoaAtualizada.getNacionalidade());
     }
 
     @Test
@@ -73,9 +73,9 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveBuscarLocalizacaoZonaResidencia() {
-        var localizacaoStr = LocalizacaoZonaResidencia.RURAL.getValor();
+        var localizacaoStr = String.valueOf(LocalizacaoZonaResidencia.RURAL.ordinal());
         LocalizacaoZonaResidencia localizacao = genericPessoaImportacaoService.getLocalizacaoZonaResidencia(localizacaoStr);
-        assertEquals(localizacao.getValor(), localizacaoStr);
+        assertEquals(String.valueOf(localizacao.ordinal()), localizacaoStr);
 
     }
 
