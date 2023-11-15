@@ -154,17 +154,17 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveBuscarLocalizacaoZonaResidencia() {
-        var localizacaoStr = String.valueOf(LocalizacaoZonaResidencia.RURAL.ordinal());
-        LocalizacaoZonaResidencia localizacao = genericPessoaImportacao.getLocalizacaoZonaResidencia(localizacaoStr);
-        assertEquals(String.valueOf(localizacao.ordinal()), localizacaoStr);
+        var localizacaoZonaResidencia = LocalizacaoZonaResidencia.RURAL;
+        LocalizacaoZonaResidencia localizacao = genericPessoaImportacao.getLocalizacaoZonaResidencia(localizacaoZonaResidencia.getValor());
+        assertEquals(localizacao, localizacao);
 
     }
 
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
-        var localizacaoDiferenciadaResidencia = String.valueOf(LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO.ordinal());
-        var localizacao = genericPessoaImportacao.getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia);
-        assertEquals(String.valueOf(localizacao.ordinal()), localizacaoDiferenciadaResidencia);
+        var localizacaoDiferenciadaResidencia = LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO;
+        var localizacao = genericPessoaImportacao.getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia.getValor());
+        assertEquals(localizacao, localizacaoDiferenciadaResidencia);
     }
 
     @Test
@@ -184,8 +184,9 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveBuscarTipoFiliacao() {
-        var tipoFiliacao = genericPessoaImportacao.getTipoFiliacao(String.valueOf(TipoFiliacao.FILIACAO_1_OU_2.ordinal()));
-        assertEquals( TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
+        var filiacaoStr = TipoFiliacao.FILIACAO_1_OU_2;
+        var tipoFiliacao = genericPessoaImportacao.getTipoFiliacao(filiacaoStr.getValor());
+        assertEquals(TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
 }

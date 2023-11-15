@@ -148,11 +148,11 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public LocalizacaoZonaResidencia getLocalizacaoZonaResidencia(String conteudo) {
-        return (LocalizacaoZonaResidencia) buscaRegistroConteudoLido(conteudo, LocalizacaoZonaResidencia.values());
+        return (LocalizacaoZonaResidencia) buscaRegistroConteudoLido(LocalizacaoZonaResidencia.getValorStrPeloCodigo(conteudo), LocalizacaoZonaResidencia.values());
     }
 
     public LocalizacaoDiferenciadaResidencia getLocalizacaoDiferenciadaResidencia(String conteudo) {
-        return (LocalizacaoDiferenciadaResidencia) buscaRegistroConteudoLido((conteudo), LocalizacaoDiferenciadaResidencia.values());
+        return (LocalizacaoDiferenciadaResidencia) buscaRegistroConteudoLido(LocalizacaoDiferenciadaResidencia.getValorStrPeloCodigo(conteudo), LocalizacaoDiferenciadaResidencia.values());
     }
 
     public Nacionalidade getNacionalidade(String conteudo) {
@@ -160,7 +160,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public TipoFiliacao getTipoFiliacao(String conteudo) {
-        return (TipoFiliacao) buscaRegistroConteudoLido(conteudo, TipoFiliacao.values());
+        return (TipoFiliacao) buscaRegistroConteudoLido(TipoFiliacao.getValorStrPeloCodigo(conteudo), TipoFiliacao.values());
     }
 
 }
