@@ -47,7 +47,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
 
-    protected static CorRaca getCorRaca(String[] conteudoLinha, int posicaoConteudo) {
+    protected CorRaca getCorRaca(String[] conteudoLinha, int posicaoConteudo) {
         try {
             return Optional
                     .ofNullable(valorString(conteudoLinha, posicaoConteudo))
@@ -58,18 +58,18 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
         }
     }
 
-    protected static Sexo getSexo(Integer codigoSexo) {
+    protected Sexo getSexo(Integer codigoSexo) {
         return Optional.ofNullable(codigoSexo).map(getFunctionSexo()).orElse(null);
     }
-    protected static Paises getPais(Integer codigoPais) {
+    protected Paises getPais(Integer codigoPais) {
         return Optional.ofNullable(codigoPais).map(getFunctionPaisPorDescricao()).orElse(null);
     }
 
-    private static Function<Integer, Paises> getFunctionPaisPorDescricao() {
+    protected Function<Integer, Paises> getFunctionPaisPorDescricao() {
         return codigoPais -> Paises.getValorPorDescricao(codigoPais);
     }
 
-    private static Function<Integer, Sexo> getFunctionSexo() {
+    Function<Integer, Sexo> getFunctionSexo() {
         return codigoSexo -> Sexo.values()[codigoSexo -1];
     }
 
@@ -156,7 +156,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
     public Nacionalidade getNacionalidade(String conteudo) {
-        return (Nacionalidade) buscaRegistroConteudoLido(conteudo, Nacionalidade.values());
+        return (Nacionalidade) buscaRegistroConteudoLido(Nacionalidade.getValorStrPeloCodigo(conteudo), Nacionalidade.values());
     }
 
     public TipoFiliacao getTipoFiliacao(String conteudo) {
