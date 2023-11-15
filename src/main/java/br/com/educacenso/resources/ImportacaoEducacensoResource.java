@@ -1,6 +1,6 @@
 package br.com.educacenso.resources;
 
-import br.com.educacenso.services.ImportacaoEducacensoService;
+import br.com.educacenso.app.services.ImportacaoEducacensoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
