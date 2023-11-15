@@ -4,7 +4,7 @@ import br.com.educacenso.app.constraints.LocalizacaoDiferenciadaResidencia;
 import br.com.educacenso.app.constraints.LocalizacaoZonaResidencia;
 import br.com.educacenso.app.constraints.DependenciaAdministrativa;
 import br.com.educacenso.app.constraints.SituacaoFuncionamento;
-import br.com.educacenso.contraints.TipoRegistro;
+import br.com.educacenso.app.constraints.TipoRegistro;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

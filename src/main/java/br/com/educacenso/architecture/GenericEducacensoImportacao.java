@@ -1,6 +1,6 @@
 package br.com.educacenso.architecture;
 
-import br.com.educacenso.contraints.TipoRegistro;
+import br.com.educacenso.app.constraints.TipoRegistro;
 import org.springframework.beans.BeanUtils;
 
 import java.text.ParseException;
