@@ -37,7 +37,7 @@ public abstract class  GenericEducacensoImportacao {
     public static Boolean stringToBoolean(String[] conteudoLinha, int posicaoConteudo) {
         try{
             String strBool = conteudoLinha[posicaoConteudo].equals("1") ? "true" : "false";
-            return Boolean.parseBoolean(strBool);
+            return java.lang.Boolean.parseBoolean(strBool);
         }catch (IndexOutOfBoundsException e){
             return false;
         }
@@ -72,8 +72,15 @@ public abstract class  GenericEducacensoImportacao {
         return objetoParaAtualizar;
     }
 
-    protected static Object buscaRegistroConteudoLido(String conteudo, Object[] enumParaBusca) {
-        return ofNullable(conteudo).map(cont -> enumParaBusca[Integer.parseInt(cont)]).orElse(null);
+    protected Object buscaRegistroConteudoLido(String conteudo, Object[] enumParaBusca) {
+        return ofNullable(conteudo)
+                .filter(this::isConteudoValido)
+                .map(cont -> enumParaBusca[Integer.parseInt(cont)])
+                .orElse(null);
+    }
+
+    private Boolean isConteudoValido(String conteudo) {
+        return !conteudo.isEmpty();
     }
 
 }

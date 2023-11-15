@@ -90,9 +90,9 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
 
     @Test
     public void deveBuscarTipoEnsinoMedioCursado() {
-        final String CODIGO_ENSINO_MEDIO_CURSADO = TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO.getCodigoEducacenso();
+        final var CODIGO_ENSINO_MEDIO_CURSADO = String.valueOf(TipoEnsinoMedioCursado.CURSO_TECNICO.ordinal());
         TipoEnsinoMedioCursado ensinoMedioCursado = executarImportacaoDocentesDadosPessoaisService.getTipoEnsinoMedioCursado(CODIGO_ENSINO_MEDIO_CURSADO);
-        assertEquals(TipoEnsinoMedioCursado.MODALIDADE_NORMAL_MAGISTERIO, ensinoMedioCursado);
+        assertEquals(TipoEnsinoMedioCursado.CURSO_TECNICO, ensinoMedioCursado);
     }
 
     @Test
@@ -128,17 +128,17 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
 
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
-        var localizacaoDiferenciadaResidencia = LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO.getValor();
+        var localizacaoDiferenciadaResidencia = String.valueOf(LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO.ordinal());
 
         var localizacao = executarImportacaoDocentesDadosPessoaisService
                 .getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia);
 
-        assertEquals(localizacao.getValor(), localizacaoDiferenciadaResidencia);
+        assertEquals(String.valueOf(localizacao.ordinal()), localizacaoDiferenciadaResidencia);
     }
 
     @Test
     public void deveBuscarNacionalidadeCorreta() {
-        final String CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getCodigoEducacenso();
+        final var CODIGO_NACIONALIDADE = String.valueOf(Nacionalidade.BRASILEIRA.ordinal());
         Nacionalidade nacionalidade = executarImportacaoDocentesDadosPessoaisService.getNacionalidade(CODIGO_NACIONALIDADE);
         assertEquals( Nacionalidade.BRASILEIRA, nacionalidade);
     }
@@ -165,7 +165,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Gene
 
     @Test
     public void deveBuscarTipoFiliacao() {
-        TipoFiliacao tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(TipoFiliacao.FILIACAO_1_OU_2.getValor());
+        var tipoFiliacao = executarImportacaoDocentesDadosPessoaisService.getTipoFiliacao(String.valueOf(TipoFiliacao.FILIACAO_1_OU_2.ordinal()));
         assertEquals( TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
