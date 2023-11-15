@@ -37,7 +37,7 @@ import br.com.educacenso.app.services.ExecutarImportacaoDocentesDadosPessoaisSer
 import br.com.educacenso.app.services.ExecutarImportacaoService;
 import br.com.educacenso.app.services.ExecutarImportacaoUnidadesEnsinoIdentificacaoService;
 import br.com.educacenso.app.services.ExecutarImportacaoUnidadesEnsinoInfraestruturaService;
-import br.com.educacenso.app.services.impl.ExecutarImportacaoDocentesDadosPessoaisServiceImpl;
+import br.com.educacenso.app.services.impl.ExecutarImportacaoDocentesDadosPessoaisServiceImplService;
 import br.com.educacenso.app.services.impl.ExecutarImportacaoUnidadesEnsinoIdentificacaoServiceImpl;
 import br.com.educacenso.app.services.impl.ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,8 +151,8 @@ public enum TipoImportacaoEducacenso {
 
     public abstract ExecutarImportacaoService getTipoImportacao();
 
-    ExecutarImportacaoDocentesDadosPessoaisServiceImpl newExecutarImportacaoDocentesDadosPessoaisServiceImpl() {
-        return new ExecutarImportacaoDocentesDadosPessoaisServiceImpl(this.pessoaRepository,
+    ExecutarImportacaoDocentesDadosPessoaisServiceImplService newExecutarImportacaoDocentesDadosPessoaisServiceImpl() {
+        return new ExecutarImportacaoDocentesDadosPessoaisServiceImplService(this.pessoaRepository,
                 this.unidadeEnsinoRepository,
                 this.areaConhecimentoRepository,
                 this.areaPosGraduacaoRepository,

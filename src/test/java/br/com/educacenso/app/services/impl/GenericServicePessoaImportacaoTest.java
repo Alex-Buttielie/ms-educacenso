@@ -1,4 +1,4 @@
-package br.com.educacenso.app;
+package br.com.educacenso.app.services.impl;
 
 import br.com.educacenso.EducacensoApplicationTest;
 import br.com.educacenso.app.constraints.CorRaca;
@@ -32,10 +32,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
+public class GenericServicePessoaImportacaoTest extends EducacensoApplicationTest {
 
     @InjectMocks
-    private GenericPessoaImportacao genericPessoaImportacao;
+    private GenericServicePessoaImportacao genericServicePessoaImportacao;
     @Mock
     protected PessoaRepository pessoaRepository;
     @Mock
@@ -55,26 +55,26 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveBuscarCorRaca() {
-        var corRaca = genericPessoaImportacao.getCorRaca(valorString(NOVOS_DADOS_PESSOA, 11));
+        var corRaca = genericServicePessoaImportacao.getCorRaca(valorString(NOVOS_DADOS_PESSOA, 11));
         Assert.assertEquals( CorRaca.PARDA, corRaca);
     }
 
     @Test
     public void deveBuscarSexo() {
-        var sexo = genericPessoaImportacao.getSexo(stringToInteger(NOVOS_DADOS_PESSOA, 10));
+        var sexo = genericServicePessoaImportacao.getSexo(stringToInteger(NOVOS_DADOS_PESSOA, 10));
         Assert.assertEquals(Sexo.FEMININO, sexo);
     }
 
     @Test
     public void deveBuscarPais() {
-        var pais = genericPessoaImportacao.getPais(stringToInteger(NOVOS_DADOS_PESSOA, 13));
+        var pais = genericServicePessoaImportacao.getPais(stringToInteger(NOVOS_DADOS_PESSOA, 13));
         Assert.assertEquals(Paises.ESPANHA, pais);
     }
 
     @Test
     public void deveBuscarPaisFunction() {
         var pais = Optional.ofNullable(stringToInteger(NOVOS_DADOS_PESSOA, 13))
-                .map(genericPessoaImportacao.getFunctionPaisPorDescricao())
+                .map(genericServicePessoaImportacao.getFunctionPaisPorDescricao())
                 .orElse(null);
         Assert.assertNotNull(pais);
         Assert.assertEquals(Paises.ESPANHA, pais);
@@ -83,7 +83,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
     @Test
     public void deveBuscarSexoFunction() {
         var sexo = Optional.ofNullable(stringToInteger(NOVOS_DADOS_PESSOA, 10))
-                .map(genericPessoaImportacao.getFunctionSexo())
+                .map(genericServicePessoaImportacao.getFunctionSexo())
                 .orElse(null);
         Assert.assertNotNull(sexo);
         Assert.assertEquals(Sexo.FEMININO, sexo);
@@ -92,14 +92,14 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
     @Test
     public void deveSalvarPessoa() {
         when(pessoaRepository.save(any())).thenReturn(Pessoa.builder().id(1l).build());
-        var retorno = genericPessoaImportacao.salvarPessoa(this.pessoa);
+        var retorno = genericServicePessoaImportacao.salvarPessoa(this.pessoa);
         assertNotNull(retorno);
         assertEquals( 1l, retorno.getId());
     }
 
     @Test
     public void deveAtualizarDadosPessoa() {
-        var pessoaAtualizada = genericPessoaImportacao.atualizarDadosPessoa(NOVOS_DADOS_PESSOA);
+        var pessoaAtualizada = genericServicePessoaImportacao.atualizarDadosPessoa(NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaAtualizada);
         assertNotNull(pessoaAtualizada.getTipoRegistro());
         assertEquals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO, pessoaAtualizada.getTipoRegistro());
@@ -110,7 +110,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
     @Test
     public void deveRastrearPessoaCacteristicasIndiv() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
-        var pessoaRastreada = genericPessoaImportacao.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
+        var pessoaRastreada = genericServicePessoaImportacao.rastrearPessoaCacteristicasIndiv(NOVOS_DADOS_PESSOA).orElse(null);
         assertNotNull(pessoaRastreada);
         assertEquals(pessoaRastreada.getNome(), pessoa.getNome());
         assertEquals(pessoaRastreada.getCpf(), pessoa.getCpf());
@@ -119,21 +119,21 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
     @Test
     public void deveRastrearPessoaCpf() {
         when(pessoaRepository.findPessoaByCpf(pessoa.getCpf())).thenReturn(Optional.of(pessoa));
-        var pessoaRastreada = genericPessoaImportacao.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
+        var pessoaRastreada = genericServicePessoaImportacao.rastrearPessoaCpf(NOVOS_DADOS_PESSOA);
         assertEquals(TRUE, pessoaRastreada.isPresent());
     }
 
     @Test
     public void deveRastrearPessoaNome() {
         when(pessoaRepository.findPessoaByNome(pessoa.getNome())).thenReturn(Optional.of(pessoa));
-        var pessoaRastreada = genericPessoaImportacao.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
+        var pessoaRastreada = genericServicePessoaImportacao.rastrearPessoaNome(NOVOS_DADOS_PESSOA);
         assertEquals(TRUE, pessoaRastreada.isPresent());
 
     }
 
     @Test
     public void deveAtualizarDadosPessoaConsultada() {
-        var pessoaConsulta = genericPessoaImportacao.atualizarDadosPessoaConsultada(Optional.of(pessoa), NOVOS_DADOS_PESSOA);
+        var pessoaConsulta = genericServicePessoaImportacao.atualizarDadosPessoaConsultada(Optional.of(pessoa), NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaConsulta);
         assertNotNull(pessoaConsulta.getId());
         assertEquals(pessoaConsulta.getId(), pessoa.getId());
@@ -141,22 +141,22 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveAtualizarDadosPessoaNaoConsultada() {
-        var pessoaConsulta = genericPessoaImportacao.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
-        var pessoaConsultaDadosPreenchidos = genericPessoaImportacao.atualizarDadosPessoaNaoConsultada(NOVOS_DADOS_PESSOA);
+        var pessoaConsulta = genericServicePessoaImportacao.atualizarDadosPessoaNaoConsultada(DADOS_PESSOA_VAZIO_STR);
+        var pessoaConsultaDadosPreenchidos = genericServicePessoaImportacao.atualizarDadosPessoaNaoConsultada(NOVOS_DADOS_PESSOA);
         assertNotNull(pessoaConsulta);
         assertNotNull(pessoaConsultaDadosPreenchidos);
     }
 
     @Test
     public void deveBuscarDadosPessoaNaLinha() {
-        var pessoaConsultada = genericPessoaImportacao.getDadosPessoaNaLinha(NOVOS_DADOS_PESSOA, Optional.ofNullable(pessoa));
+        var pessoaConsultada = genericServicePessoaImportacao.getDadosPessoaNaLinha(NOVOS_DADOS_PESSOA, Optional.ofNullable(pessoa));
         assertNotNull(pessoaConsultada);
     }
 
     @Test
     public void deveBuscarLocalizacaoZonaResidencia() {
         var localizacaoZonaResidencia = LocalizacaoZonaResidencia.RURAL;
-        LocalizacaoZonaResidencia localizacao = genericPessoaImportacao.getLocalizacaoZonaResidencia(localizacaoZonaResidencia.getValor());
+        LocalizacaoZonaResidencia localizacao = genericServicePessoaImportacao.getLocalizacaoZonaResidencia(localizacaoZonaResidencia.getValor());
         assertEquals(localizacao, localizacao);
 
     }
@@ -164,29 +164,29 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
     @Test
     public void deveBuscarLocalizacaoDiferenciadaResidencia() {
         var localizacaoDiferenciadaResidencia = LocalizacaoDiferenciadaResidencia.AREA_ASSENTAMENTO;
-        var localizacao = genericPessoaImportacao.getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia.getValor());
+        var localizacao = genericServicePessoaImportacao.getLocalizacaoDiferenciadaResidencia(localizacaoDiferenciadaResidencia.getValor());
         assertEquals(localizacao, localizacaoDiferenciadaResidencia);
     }
 
     @Test
     public void naoDeveBuscarLocalizacaoZonaResidencia() {
-        var localizacaoDiferenciadaResidencia = genericPessoaImportacao.getLocalizacaoDiferenciadaResidencia(null);
+        var localizacaoDiferenciadaResidencia = genericServicePessoaImportacao.getLocalizacaoDiferenciadaResidencia(null);
         assertNull(localizacaoDiferenciadaResidencia);
-        localizacaoDiferenciadaResidencia = genericPessoaImportacao.getLocalizacaoDiferenciadaResidencia("");
+        localizacaoDiferenciadaResidencia = genericServicePessoaImportacao.getLocalizacaoDiferenciadaResidencia("");
         assertNull(localizacaoDiferenciadaResidencia);
     }
 
     @Test
     public void deveBuscarNacionalidadeCorreta() {
         final var CODIGO_NACIONALIDADE = Nacionalidade.BRASILEIRA.getValorStr();
-        Nacionalidade nacionalidade = genericPessoaImportacao.getNacionalidade(CODIGO_NACIONALIDADE);
+        Nacionalidade nacionalidade = genericServicePessoaImportacao.getNacionalidade(CODIGO_NACIONALIDADE);
         assertEquals( Nacionalidade.BRASILEIRA, nacionalidade);
     }
 
     @Test
     public void deveBuscarTipoFiliacao() {
         var filiacaoStr = TipoFiliacao.FILIACAO_1_OU_2;
-        var tipoFiliacao = genericPessoaImportacao.getTipoFiliacao(filiacaoStr.getValor());
+        var tipoFiliacao = genericServicePessoaImportacao.getTipoFiliacao(filiacaoStr.getValor());
         assertEquals(TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
