@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static br.com.educacenso.architecture.GenericEducacensoImportacao.stringToInteger;
+import static br.com.educacenso.architecture.GenericEducacensoImportacao.valorString;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -54,7 +55,7 @@ public class GenericPessoaImportacaoTest extends EducacensoApplicationTest {
 
     @Test
     public void deveBuscarCorRaca() {
-        var corRaca = genericPessoaImportacao.getCorRaca(NOVOS_DADOS_PESSOA, 11);
+        var corRaca = genericPessoaImportacao.getCorRaca(valorString(NOVOS_DADOS_PESSOA, 11));
         Assert.assertEquals( CorRaca.PARDA, corRaca);
     }
 
