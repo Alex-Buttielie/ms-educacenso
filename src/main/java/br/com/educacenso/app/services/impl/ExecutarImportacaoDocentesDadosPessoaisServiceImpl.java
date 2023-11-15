@@ -101,16 +101,16 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
         return repository.findProfessorByPessoa(pessoa);
     }
 
-    private Professor atualizarDadosProfessorNaoConsultado(String[] conteudoLinha, Pessoa pessoa) {
+    protected Professor atualizarDadosProfessorNaoConsultado(String[] conteudoLinha, Pessoa pessoa) {
         return getDadosProfessorNaLinha(conteudoLinha, Optional.empty(), pessoa);
     }
 
-    private Professor atualizarDadosProfessorConsultado(Optional<Professor> professorConsultado,
+    protected Professor atualizarDadosProfessorConsultado(Optional<Professor> professorConsultado,
                                                         String[] conteudoLinha, Pessoa pessoa) {
         return getDadosProfessorNaLinha(conteudoLinha, professorConsultado, pessoa);
     }
 
-    private Professor getDadosProfessorNaLinha(String[] conteudoLinha,
+    protected Professor getDadosProfessorNaLinha(String[] conteudoLinha,
                                                Optional<Professor> professor,
                                                Pessoa pessoa) {
         return  Professor
@@ -212,9 +212,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
 
     public TipoPosGraduacao getTipoPosGraduacao(String[] conteudoLinha, int posicaoConteudo) {
         try {
-            return ofNullable(valorString(conteudoLinha, posicaoConteudo))
-                    .map(conteudoLido->TipoPosGraduacao.values()[Integer.parseInt(conteudoLido) - 1])
-                    .orElse(null);
+            return (TipoPosGraduacao) buscaRegistroConteudoLido(TipoPosGraduacao.getValorStrPeloCodigo(conteudoLinha[posicaoConteudo]), TipoPosGraduacao.values());
         }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
             return null;
         }
@@ -225,7 +223,6 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
             return  ofNullable(stringToLong(conteudoLinha, posicaoConteudo))
                     .map(codigo -> areaPosGraduacaoRepository.findById(codigo).orElse(null))
                     .orElse(null);
-
         }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
             return null;
         }
@@ -319,10 +316,14 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImpl
     }
 
     public AreaConhecimento getAreaConhecimentoCurricular(String[] conteudoLinha, int posicaoCampo) {
-        return ofNullable(conteudoLinha[posicaoCampo])
-                .filter(conteudoPosicao -> !conteudoPosicao.isEmpty())
-                .map(isConteudoCampoPreenchido -> areaConhecimentoRepository.findById(Long.parseLong(conteudoLinha[posicaoCampo])).get())
-                .orElse(null);
+        try {
+            return  ofNullable(stringToLong(conteudoLinha, posicaoCampo))
+                    .map(valor -> areaConhecimentoRepository.findById(valor).orElse(null))
+                    .orElse(null);
+
+        }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
+            return null;
+        }
     }
 
 
