@@ -47,15 +47,8 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
     }
 
 
-    protected CorRaca getCorRaca(String[] conteudoLinha, int posicaoConteudo) {
-        try {
-            return Optional
-                    .ofNullable(valorString(conteudoLinha, posicaoConteudo))
-                    .map(conteudoLido->CorRaca.values()[Integer.parseInt(conteudoLido)])
-                    .orElse(null);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            return null;
-        }
+    protected CorRaca getCorRaca(String conteudo) {
+        return (CorRaca) buscaRegistroConteudoLido(conteudo, CorRaca.values());
     }
 
     protected Sexo getSexo(Integer codigoSexo) {
@@ -128,7 +121,7 @@ public class GenericPessoaImportacao extends GenericEducacensoImportacao impleme
                 .fkUni(unidadeEnsinoRepository.findById(52104346l).orElse(null))
                 .identificacaoUnica(stringToLong(conteudoLinha, 3))
                 .cep(valorString(conteudoLinha, 40))
-                .corRaca(getCorRaca(conteudoLinha, 11))
+                .corRaca(getCorRaca(valorString(conteudoLinha, 11)))
                 .cpf(valorString(conteudoLinha, 4))
                 .dataNascimento(stringToDate(conteudoLinha, 6))
                 .localizacaoDiferenciadaResidencia(getLocalizacaoDiferenciadaResidencia(valorString(conteudoLinha, 43)))

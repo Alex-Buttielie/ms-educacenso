@@ -637,7 +637,7 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
                     .unidadeAtendimentoSocioeducativa(stringToBoolean(conteudoLinha, 5))
                     .unidadePrisional(stringToBoolean(conteudoLinha, 6))
                     .outros(stringToBoolean(conteudoLinha, 7))
-                    .formaOcupacaoPredio(getFormaOcupacaoPredio(conteudoLinha, 8))
+                    .formaOcupacaoPredio(getFormaOcupacaoPredio(valorString(conteudoLinha, 8)))
                     .predioEscolarCompartilhadoComOutraEscola(stringToBoolean(conteudoLinha, 9))
                     .predioEscolarCompartilhadoComOutraEscola(stringToBoolean(conteudoLinha, 9))
                     .build();
@@ -647,15 +647,8 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
         }
     }
 
-    private FormaOcupacaoPredio getFormaOcupacaoPredio(String[] conteudoLinha, int posicaoConteudo) {
-        try {
-            return Optional
-                    .ofNullable(valorString(conteudoLinha, posicaoConteudo))
-                    .map(conteudoLido-> FormaOcupacaoPredio.values()[Integer.parseInt(conteudoLido) -1])
-                    .orElse(null);
-        }catch (ArrayIndexOutOfBoundsException  | NumberFormatException e) {
-            return null;
-        }
+    private FormaOcupacaoPredio getFormaOcupacaoPredio(String conteudo) {
+        return (FormaOcupacaoPredio) buscaRegistroConteudoLido(conteudo, FormaOcupacaoPredio.values());
     }
 
     private UnidadeEnsino atualizarDadosUnidadeEnsino(String[] conteudoLinha) {
