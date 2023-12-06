@@ -68,4 +68,18 @@ public class ExecutarImportacaoTurmasServiceImplTest {
         Assert.assertEquals("00", horarioFuncionamento.getMinutoFinal());
     }
 
+    @Test
+    public void deveTestarBuscaDiasSemanaDaTurma() {
+        var turma = Optional.of(Turma.builder().build());
+        var diasSemana = executarImportacaoTurmasService.buscarDiasSemanaDaTurma(LINHA, turma);
+        Assert.assertNotNull(diasSemana);
+        Assert.assertEquals(Boolean.FALSE,diasSemana.getDomingo());
+        Assert.assertEquals(Boolean.TRUE,diasSemana.getSegunda());
+        Assert.assertEquals(Boolean.TRUE,diasSemana.getTerca());
+        Assert.assertEquals(Boolean.TRUE,diasSemana.getQuarta());
+        Assert.assertEquals(Boolean.TRUE,diasSemana.getQuinta());
+        Assert.assertEquals(Boolean.TRUE,diasSemana.getSexta());
+        Assert.assertEquals(Boolean.FALSE,diasSemana.getSabado());
+    }
+
 }

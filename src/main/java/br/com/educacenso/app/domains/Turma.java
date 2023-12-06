@@ -68,5 +68,9 @@ public class Turma {
     @JoinColumn()
     @JsonFormat
     private HorarioFuncionamentoTurma horarioFuncionamento;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private DiasSemanaTurma diasSemana;
 
 }

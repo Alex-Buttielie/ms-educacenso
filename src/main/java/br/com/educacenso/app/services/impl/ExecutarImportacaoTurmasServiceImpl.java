@@ -1,6 +1,7 @@
 package br.com.educacenso.app.services.impl;
 
 import br.com.educacenso.app.constraints.TipoMediacao;
+import br.com.educacenso.app.domains.DiasSemanaTurma;
 import br.com.educacenso.app.domains.HorarioFuncionamentoTurma;
 import br.com.educacenso.app.domains.Turma;
 import br.com.educacenso.app.repositories.HorarioFuncionamentoTurmaRepository;
@@ -15,9 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Component
-public class ExecutarImportacaoTurmasServiceImpl
-        extends GenericEducacensoImportacao
-        implements ExecutarImportacaoService {
+public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImportacao implements ExecutarImportacaoService {
 
     private TurmaRepository turmaRepository;
     private UnidadeEnsinoRepository unidadeEnsinoRepository;
@@ -80,6 +79,32 @@ public class ExecutarImportacaoTurmasServiceImpl
         }catch (Exception e) {
             return null;
         }
+    }
+
+    protected DiasSemanaTurma buscarDiasSemanaDaTurma(String[] conteudoLinha, Optional<Turma> turma) {
+        try {
+            var dias = turma
+                    .map(Turma::getDiasSemana)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return  DiasSemanaTurma
+                    .builder()
+                    .id(dias.map(DiasSemanaTurma::getId).orElse(null))
+                    .domingo(stringToBoolean(conteudoLinha, 10))
+                    .segunda(stringToBoolean(conteudoLinha, 11))
+                    .terca(stringToBoolean(conteudoLinha, 12))
+                    .quarta(stringToBoolean(conteudoLinha, 13))
+                    .quinta(stringToBoolean(conteudoLinha, 14))
+                    .sexta(stringToBoolean(conteudoLinha, 15))
+                    .sabado(stringToBoolean(conteudoLinha, 16))
+                    .build();
+
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     protected TipoMediacao buscarMediacao(String conteudo) {
