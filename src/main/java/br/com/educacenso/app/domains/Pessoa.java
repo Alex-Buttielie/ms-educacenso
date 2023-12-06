@@ -70,11 +70,11 @@ public class Pessoa implements Serializable {
     @Column(name = "sexo")
     private Sexo sexo;
     @Basic
-    @Column(name = "cor_raca")
-    private CorRaca corRaca;
-    @Basic
     @Column(name = "nacionalidade")
     private Nacionalidade nacionalidade;
+    @Basic
+    @Column(name = "cor_raca")
+    private CorRaca corRaca;
     @Basic
     @Column(name = "pais_nacionalidade")
     private Paises paisNacionalidade;

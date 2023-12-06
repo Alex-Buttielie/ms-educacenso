@@ -1,5 +1,6 @@
 package br.com.educacenso.app.domains;
 
+import br.com.educacenso.app.constraints.TipoMediacao;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,9 @@ public class Turma {
     @Column(name = "codigo_inep")
     private Long codigoInep;
     @Basic
+    @Column(name = "codigo_turma")
+    private String codigoTurma;
+    @Basic
     @Column(name = "nome")
     private String nome;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,5 +57,16 @@ public class Turma {
     @JoinColumn()
     @JsonFormat
     private SalaAula salaAula;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private UnidadeEnsino unidadeEnsino;
+    @Basic
+    @Column(name = "tipo_mediacao")
+    private TipoMediacao tipoMediacao;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private HorarioFuncionamentoTurma horarioFuncionamento;
 
 }
