@@ -39,7 +39,7 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
     }
 
     private Turma atualizarDadosTurma(String[] conteudoLinha) {
-        return Optional.ofNullable(turmaRepository.findTurmaByCodigoInep(stringToLong(conteudoLinha,4 )))
+        return Optional.ofNullable(turmaRepository.findTurmaByCodigoTurma(valorString(conteudoLinha,2)))
                 .map(turmaConsultada -> atualizarDadosTurmaConsultada(Optional.of(turmaConsultada), conteudoLinha))
                 .orElse(atualizarDadosTurmaNaoConsultada(conteudoLinha));
 
