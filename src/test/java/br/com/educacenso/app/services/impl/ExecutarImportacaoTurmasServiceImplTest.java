@@ -36,7 +36,7 @@ public class ExecutarImportacaoTurmasServiceImplTest {
     @Test
     public void deveTestarImportacaoDaLinha() {
         var turmaMock = Turma.builder().id(1l).build();
-        when(turmaRepository.findTurmaByCodigoInep(any())).thenReturn(turmaMock);
+        when(turmaRepository.findTurmaByCodigoTurma(any())).thenReturn(turmaMock);
         when(turmaRepository.saveAndFlush(any())).thenReturn(turmaMock);
         var retorno = executarImportacaoTurmasService.importarLinhaArquivo(LINHA);
         Assert.assertNotNull(retorno);
@@ -45,7 +45,7 @@ public class ExecutarImportacaoTurmasServiceImplTest {
 
     @Test
     public void naoDeveTestarImportacaoDaLinha() {
-        when(turmaRepository.findTurmaByCodigoInep(any())).thenReturn(null);
+        when(turmaRepository.findTurmaByCodigoTurma(any())).thenReturn(null);
         var retorno = executarImportacaoTurmasService.importarLinhaArquivo(null);
         Assert.assertTrue(retorno.isEmpty());
     }
