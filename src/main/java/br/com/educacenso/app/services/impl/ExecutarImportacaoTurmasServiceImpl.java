@@ -2,6 +2,7 @@ package br.com.educacenso.app.services.impl;
 
 import br.com.educacenso.app.constraints.TipoMediacao;
 import br.com.educacenso.app.domains.DiasSemanaTurma;
+import br.com.educacenso.app.domains.FormaOrganizacaoTurma;
 import br.com.educacenso.app.domains.HorarioFuncionamentoTurma;
 import br.com.educacenso.app.domains.TipoAtividadeComplementar;
 import br.com.educacenso.app.domains.Turma;
@@ -64,8 +65,33 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
                 .itinerarioInformativo(stringToBoolean(conteudoLinha, 21))
                 .naoSeAplica(stringToBoolean(conteudoLinha, 22))
                 .tipoAtividadeComplementar(buscarAtividadeComplementar(conteudoLinha, turmaConsultada))
+                .formaOrganizacaoTurma(buscarFormaOrganizacaoTurma(conteudoLinha, turmaConsultada))
                 .build();
 
+    }
+
+    private FormaOrganizacaoTurma buscarFormaOrganizacaoTurma(String[] conteudoLinha, Optional<Turma> turma) {
+        try {
+            var formaOrganizacaoTurma = turma
+                    .map(Turma::getFormaOrganizacaoTurma)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return  FormaOrganizacaoTurma
+                    .builder()
+                    .id(formaOrganizacaoTurma.map(FormaOrganizacaoTurma::getId).orElse(null))
+                    .seriesAnuais(stringToBoolean(conteudoLinha, 33))
+                    .periodosSemestrais(stringToBoolean(conteudoLinha, 34))
+                    .ciclos(stringToBoolean(conteudoLinha, 35))
+                    .gruposNaoSeriados(stringToBoolean(conteudoLinha, 36))
+                    .modulos(stringToBoolean(conteudoLinha, 37))
+                    .alternanciaPeriodos(stringToBoolean(conteudoLinha, 38))
+                    .build();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     protected HorarioFuncionamentoTurma buscarHorarioFuncionamentoTurma(String[] conteudoLinha, Optional<Turma> turma) {

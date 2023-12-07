@@ -94,5 +94,8 @@ public class Turma {
     @JoinColumn()
     @JsonFormat
     private TipoAtividadeComplementar tipoAtividadeComplementar;
-
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private FormaOrganizacaoTurma formaOrganizacaoTurma;
 }
