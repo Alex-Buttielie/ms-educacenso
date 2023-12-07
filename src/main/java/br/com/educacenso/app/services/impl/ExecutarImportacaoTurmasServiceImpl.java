@@ -3,6 +3,7 @@ package br.com.educacenso.app.services.impl;
 import br.com.educacenso.app.constraints.TipoMediacao;
 import br.com.educacenso.app.domains.DiasSemanaTurma;
 import br.com.educacenso.app.domains.HorarioFuncionamentoTurma;
+import br.com.educacenso.app.domains.TipoAtividadeComplementar;
 import br.com.educacenso.app.domains.Turma;
 import br.com.educacenso.app.repositories.HorarioFuncionamentoTurmaRepository;
 import br.com.educacenso.app.repositories.TurmaRepository;
@@ -55,6 +56,14 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
                 .nome(valorString(conteudoLinha, 4))
                 .tipoMediacao(buscarMediacao(valorString(conteudoLinha, 5)))
                 .horarioFuncionamento(buscarHorarioFuncionamentoTurma(conteudoLinha, turmaConsultada))
+                .diasSemana(buscarDiasSemanaDaTurma(conteudoLinha, turmaConsultada))
+                .escolarizacao(stringToBoolean(conteudoLinha, 17))
+                .atividadeComplementar(stringToBoolean(conteudoLinha, 18))
+                .atendimentoEspecializado(stringToBoolean(conteudoLinha, 19))
+                .formacaoGeralBasica(stringToBoolean(conteudoLinha, 20))
+                .itinerarioInformativo(stringToBoolean(conteudoLinha, 21))
+                .naoSeAplica(stringToBoolean(conteudoLinha, 22))
+                .tipoAtividadeComplementar(buscarAtividadeComplementar(conteudoLinha, turmaConsultada))
                 .build();
 
     }
@@ -76,7 +85,7 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
                     .minutoFinal(valorString(conteudoLinha, 9))
                     .build();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -121,6 +130,34 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
 
     private Turma atualizarDadosTurmaConsultada(Optional<Turma> turmaConsultada, String[] conteudoLinha) {
         return getDadosDaTurmaNaLinha(conteudoLinha, turmaConsultada);
+    }
+
+    protected TipoAtividadeComplementar buscarAtividadeComplementar(String[] conteudoLinha, Optional<Turma> turma) {
+        try {
+            var atividade = turma
+                    .map(Turma::getTipoAtividadeComplementar)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return  TipoAtividadeComplementar
+                    .builder()
+                    .codigo1(stringToLong(conteudoLinha, 23))
+                    .codigo2(stringToLong(conteudoLinha, 24))
+                    .codigo3(stringToLong(conteudoLinha, 25))
+                    .codigo4(stringToLong(conteudoLinha, 26))
+                    .codigo5(stringToLong(conteudoLinha, 27))
+                    .codigo6(stringToLong(conteudoLinha, 28))
+                    .localFuncDiferenciado(stringToLong(conteudoLinha, 29))
+                    .modalidade(stringToLong(conteudoLinha, 30))
+                    .etapa(stringToLong(conteudoLinha, 31))
+                    .codigo_curso(stringToLong(conteudoLinha, 32))
+                    .id(atividade.map(TipoAtividadeComplementar::getId).orElse(null))
+                    .build();
+
+        }catch (Exception e) {
+            return null;
+        }
     }
 
 }

@@ -72,5 +72,27 @@ public class Turma {
     @JoinColumn()
     @JsonFormat
     private DiasSemanaTurma diasSemana;
+    @Basic
+    @Column(name = "escolarizacao")
+    private Boolean escolarizacao;
+    @Basic
+    @Column(name = "atividade_complementar")
+    private Boolean atividadeComplementar;
+    @Basic
+    @Column(name = "atendimento_especializado")
+    private Boolean atendimentoEspecializado;
+    @Basic
+    @Column(name = "formacao_geral_basica")
+    private Boolean formacaoGeralBasica;
+    @Basic
+    @Column(name = "itinerario_informativo")
+    private Boolean itinerarioInformativo;
+    @Basic
+    @Column(name = "nao_se_aplica")
+    private Boolean naoSeAplica;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
+    @JsonFormat
+    private TipoAtividadeComplementar tipoAtividadeComplementar;
 
 }

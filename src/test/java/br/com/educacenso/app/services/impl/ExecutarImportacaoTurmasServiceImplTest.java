@@ -82,4 +82,12 @@ public class ExecutarImportacaoTurmasServiceImplTest {
         Assert.assertEquals(Boolean.FALSE,diasSemana.getSabado());
     }
 
+    @Test
+    public void deveBuscarTipoAtividadeComplementar() {
+        var turma = Optional.of(Turma.builder().build());
+        var atividadeComplementar = executarImportacaoTurmasService.buscarAtividadeComplementar(LINHA, turma);
+        Assert.assertNotNull(atividadeComplementar);
+        Assert.assertEquals(1, atividadeComplementar.getCodigo5().longValue());
+    }
+
 }
