@@ -6,6 +6,7 @@ import br.com.educacenso.app.domains.FormaOrganizacaoTurma;
 import br.com.educacenso.app.domains.HorarioFuncionamentoTurma;
 import br.com.educacenso.app.domains.TipoAtividadeComplementar;
 import br.com.educacenso.app.domains.Turma;
+import br.com.educacenso.app.domains.UnidadeCurricularTurma;
 import br.com.educacenso.app.repositories.HorarioFuncionamentoTurmaRepository;
 import br.com.educacenso.app.repositories.TurmaRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
@@ -66,8 +67,34 @@ public class ExecutarImportacaoTurmasServiceImpl extends GenericEducacensoImport
                 .naoSeAplica(stringToBoolean(conteudoLinha, 22))
                 .tipoAtividadeComplementar(buscarAtividadeComplementar(conteudoLinha, turmaConsultada))
                 .formaOrganizacaoTurma(buscarFormaOrganizacaoTurma(conteudoLinha, turmaConsultada))
+                .unidadeCurricularTurma(buscarUnidadeCurricularTurma(conteudoLinha, turmaConsultada))
                 .build();
 
+    }
+
+    private UnidadeCurricularTurma buscarUnidadeCurricularTurma(String[] conteudoLinha, Optional<Turma> turma) {
+        try {
+            var unidade = turma
+                    .map(Turma::getUnidadeCurricularTurma)
+                    .filter(Objects::nonNull)
+                    .stream()
+                    .findAny();
+
+            return  UnidadeCurricularTurma
+                    .builder()
+                    .id(unidade.map(UnidadeCurricularTurma::getId).orElse(null))
+                    .eletivas(stringToBoolean(conteudoLinha, 39))
+                    .libras(stringToBoolean(conteudoLinha, 40))
+                    .lingua_indigena(stringToBoolean(conteudoLinha, 41))
+                    .linguaLitEspanhol(stringToBoolean(conteudoLinha, 42))
+                    .linguaLitFrances(stringToBoolean(conteudoLinha, 43))
+                    .linguaLitOutras(stringToBoolean(conteudoLinha, 44))
+                    .projetoVida(stringToBoolean(conteudoLinha, 45))
+                    .build();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private FormaOrganizacaoTurma buscarFormaOrganizacaoTurma(String[] conteudoLinha, Optional<Turma> turma) {
