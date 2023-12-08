@@ -23,6 +23,7 @@ import br.com.educacenso.app.repositories.ProfessorRepository;
 import br.com.educacenso.app.repositories.RecursoAlunoParaAvaliacaoInepRepository;
 import br.com.educacenso.app.repositories.TipoDeficienciaEspectroAltasHabilidadesRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
+import br.com.educacenso.producer.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplService
 
     protected RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository;
     protected PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository;
+    protected MessageProducer messageProducer;
 
     @Autowired
     public ExecutarImportacaoDocentesDadosPessoaisServiceImplService(PessoaRepository pessoaRepository,
@@ -69,8 +71,10 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplService
                                                                      OutrosCursosEspecificosRepository outrosCursosEspecificosRepository,
                                                                      RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository,
                                                                      PosGraduacaoConcluidaProfessorRepository posGraduacaoConcluidaProfessorRepository,
-                                                                     ProfessorRepository professorRepository) {
-        super(pessoaRepository,unidadeEnsinoRepository);
+                                                                     ProfessorRepository professorRepository,
+                                                                     MessageProducer messageProducer) {
+        super(pessoaRepository,unidadeEnsinoRepository, messageProducer);
+        this.messageProducer = messageProducer;
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
         this.areaConhecimentoRepository = areaConhecimentoRepository;
         this.areaPosGraduacaoRepository = areaPosGraduacaoRepository;

@@ -13,6 +13,8 @@ import br.com.educacenso.app.repositories.AreaPosGraduacaoRepository;
 import br.com.educacenso.app.repositories.PessoaRepository;
 import br.com.educacenso.app.repositories.ProfessorRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
+import br.com.educacenso.producer.MessageProducer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.core.AmqpTemplate;
 
 import java.util.Optional;
 
@@ -47,6 +50,12 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Educ
     private AreaPosGraduacaoRepository areaPosGraduacaoRepository;
     @Mock
     protected Pessoa pessoa;
+    @Mock
+    private MessageProducer messageProducer;
+    @Mock
+    private AmqpTemplate amqpTemplate;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void init() {
@@ -62,7 +71,7 @@ public class ExecutarImportacaoDocentesDadosPessoaisServiceImplTest extends Educ
         executarImportacaoDocentesDadosPessoaisService = new ExecutarImportacaoDocentesDadosPessoaisServiceImplService(pessoaRepository, unidadeEnsinoRepository, areaConhecimentoRepository,
                 areaPosGraduacaoRepository, null,
                 null, null,
-                null,null, professorRepository);
+                null,null, professorRepository, messageProducer);
     }
 
     @Test

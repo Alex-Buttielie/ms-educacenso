@@ -27,6 +27,7 @@ import br.com.educacenso.app.services.ExecutarImportacaoUnidadesEnsinoInfraestru
 import br.com.educacenso.app.repositories.LinguaIndigenaRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.architecture.GenericEducacensoImportacao;
+import br.com.educacenso.producer.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -46,11 +47,15 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     @Autowired
     @Qualifier("linguaIndigenaRepository")
     private LinguaIndigenaRepository linguaIndigenaRepository;
+    @Autowired
+    private MessageProducer messageProducer;
 
     public ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl(UnidadeEnsinoRepository unidadeEnsinoRepository,
+                                                                     MessageProducer messageProducer,
                                                                      LinguaIndigenaRepository linguaIndigenaRepository) {
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
         this.linguaIndigenaRepository = linguaIndigenaRepository;
+        this.messageProducer = messageProducer;
     }
 
 
@@ -662,7 +667,9 @@ public class ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl
     }
 
     private UnidadeEnsino salvarDadosUnidadeEnsino(UnidadeEnsino unidadeEnsino) {
-        return unidadeEnsinoRepository.save(unidadeEnsino);
+        var entity =  unidadeEnsinoRepository.save(unidadeEnsino);
+        messageProducer.enviarUnidade(unidadeEnsino);
+        return entity;
     }
 
     private UnidadeEnsino atualizarDadosUnidadeEnsinoConsultada(Optional<UnidadeEnsino> unidadeEnsino,

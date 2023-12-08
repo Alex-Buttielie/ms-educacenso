@@ -12,6 +12,7 @@ import br.com.educacenso.app.constraints.TipoRegistro;
 import br.com.educacenso.app.domains.Pessoa;
 import br.com.educacenso.app.repositories.PessoaRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
+import br.com.educacenso.producer.MessageProducer;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,8 @@ public class GenericServicePessoaImportacaoTest extends EducacensoApplicationTes
     protected UnidadeEnsinoRepository unidadeEnsinoRepository;
     @Mock
     protected Pessoa pessoa;
+    @Mock
+    MessageProducer messageProducer;
 
     @BeforeEach
     public void init() {

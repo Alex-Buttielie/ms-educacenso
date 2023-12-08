@@ -12,6 +12,7 @@ import br.com.educacenso.app.repositories.PessoaRepository;
 import br.com.educacenso.app.repositories.UnidadeEnsinoRepository;
 import br.com.educacenso.app.services.GenericPessoaImportacaoService;
 import br.com.educacenso.architecture.GenericEducacensoImportacao;
+import br.com.educacenso.producer.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -38,12 +39,15 @@ public class GenericServicePessoaImportacao extends GenericEducacensoImportacao 
     protected UnidadeEnsinoRepository unidadeEnsinoRepository;
 
     protected Pessoa pessoaParaSalvar;
+    protected MessageProducer messageProducer;
 
     @Autowired
     protected GenericServicePessoaImportacao(final PessoaRepository pessoaRepository,
-                                             final UnidadeEnsinoRepository unidadeEnsinoRepository) {
+                                             final UnidadeEnsinoRepository unidadeEnsinoRepository,
+                                             final MessageProducer messageProducer) {
         this.pessoaRepository = pessoaRepository;
         this.unidadeEnsinoRepository = unidadeEnsinoRepository;
+        this.messageProducer = messageProducer;
     }
 
 
@@ -68,6 +72,7 @@ public class GenericServicePessoaImportacao extends GenericEducacensoImportacao 
 
     public Pessoa salvarPessoa(Pessoa pessoaParaSalvar) {
         var pessoa = Optional.ofNullable(pessoaParaSalvar).map(p -> pessoaRepository.save(p)).orElse(null);
+        this.messageProducer.enviarPessoa(pessoa);
         limparPessoaScopo();
         return pessoa;
     }
