@@ -40,6 +40,7 @@ import br.com.educacenso.app.services.ExecutarImportacaoUnidadesEnsinoInfraestru
 import br.com.educacenso.app.services.impl.ExecutarImportacaoDocentesDadosPessoaisServiceImplService;
 import br.com.educacenso.app.services.impl.ExecutarImportacaoUnidadesEnsinoIdentificacaoServiceImpl;
 import br.com.educacenso.app.services.impl.ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl;
+import br.com.educacenso.producer.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +59,7 @@ public enum TipoImportacaoEducacenso {
     UNIDADE_ENSINO_COMPLEMENTAR {
         @Override
         public ExecutarImportacaoUnidadesEnsinoInfraestruturaService getTipoImportacao() {
-            return new ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl(this.unidadeEnsinoRepository,this.linguaIndigenaRepository);
+            return new ExecutarImportacaoUnidadesEnsinoInfraestruturaServiceImpl(this.unidadeEnsinoRepository, this.messageProducer, this.linguaIndigenaRepository);
         }
     },
     TURMA {
@@ -148,6 +149,7 @@ public enum TipoImportacaoEducacenso {
     protected ReservaVagasSistemaCotasRepository reservaVagasSistemaCotasRepository;
     protected OrgaosColegiadosFuncionamentoEscolaRepository orgaosColegiadosFuncionamentoEscolaRepository;
     protected QuantidadeComputadoresEmUsoAlunosRepository quantidadeComputadoresEmUsoAlunosRepository;
+    protected MessageProducer messageProducer;
 
     public abstract ExecutarImportacaoService getTipoImportacao();
 
@@ -161,7 +163,8 @@ public enum TipoImportacaoEducacenso {
                 this.outrosCursosEspecificosRepository,
                 this.recursoAlunoParaAvaliacaoInepRepository,
                 this.posGraduacaoConcluidaProfessorRepository,
-                this.professorRepository);
+                this.professorRepository,
+                this.messageProducer);
     }
 
     private void setPessoaRepository(PessoaRepository pessoaRepository) {
@@ -185,7 +188,6 @@ public enum TipoImportacaoEducacenso {
     public void setProfessorRepository(ProfessorRepository professorRepository) {
         this.professorRepository = professorRepository;
     }
-
     private void setRecursoAlunoParaAvaliacaoInepRepository(RecursoAlunoParaAvaliacaoInepRepository recursoAlunoParaAvaliacaoInepRepository) {
         this.recursoAlunoParaAvaliacaoInepRepository= recursoAlunoParaAvaliacaoInepRepository;
     }
@@ -234,6 +236,9 @@ public enum TipoImportacaoEducacenso {
     }
     private void setQuantidadeComputadoresEmUsoAlunosRepository(QuantidadeComputadoresEmUsoAlunosRepository quantidadeComputadoresEmUsoAlunosRepository) {
         this.quantidadeComputadoresEmUsoAlunosRepository = quantidadeComputadoresEmUsoAlunosRepository;
+    }
+    public void setMessageProducer(MessageProducer messageProducer) {
+        this.messageProducer = messageProducer;
     }
     private void setReservaVagasSistemaCotasRepository(ReservaVagasSistemaCotasRepository reservaVagasSistemaCotasRepository) {
         this.reservaVagasSistemaCotasRepository = reservaVagasSistemaCotasRepository;
@@ -339,6 +344,8 @@ public enum TipoImportacaoEducacenso {
         private OrgaosColegiadosFuncionamentoEscolaRepository orgaosColegiadosFuncionamentoEscolaRepository;
         @Autowired
         private QuantidadeComputadoresEmUsoAlunosRepository quantidadeComputadoresEmUsoAlunosRepository;
+        @Autowired
+        private MessageProducer messageProducer;
 
         @PostConstruct
         private void postConstruct() {
@@ -375,6 +382,7 @@ public enum TipoImportacaoEducacenso {
                 item.setReservaVagasSistemaCotasRepository(reservaVagasSistemaCotasRepository);
                 item.setOrgaosColegiadosFuncionamentoEscolaRepository(orgaosColegiadosFuncionamentoEscolaRepository);
                 item.setQuantidadeComputadoresEmUsoAlunosRepository(quantidadeComputadoresEmUsoAlunosRepository);
+                item.setMessageProducer(messageProducer);
             }
         }
     }
