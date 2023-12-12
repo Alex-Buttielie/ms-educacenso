@@ -193,4 +193,18 @@ public class GenericServicePessoaImportacaoTest extends EducacensoApplicationTes
         assertEquals(TipoFiliacao.FILIACAO_1_OU_2, tipoFiliacao);
     }
 
+    @Test
+    public void deveBuscarCpf() {
+        var cpf = genericServicePessoaImportacao.getCpf(NOVOS_DADOS_PESSOA, 4);
+        Assert.assertNotNull(cpf);
+        cpf = genericServicePessoaImportacao.getCpf(null, 4);
+        Assert.assertNull(cpf);
+        cpf = genericServicePessoaImportacao.getCpf(NOVOS_DADOS_PESSOA, 5);
+        Assert.assertNull(cpf);
+        cpf = genericServicePessoaImportacao.getCpf(null, null);
+        Assert.assertNull(cpf);
+        cpf = genericServicePessoaImportacao.getCpf(NOVOS_DADOS_PESSOA, null);
+        Assert.assertNull(cpf);
+    }
+
 }

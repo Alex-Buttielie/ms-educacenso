@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -123,11 +124,11 @@ public class GenericServicePessoaImportacao extends GenericEducacensoImportacao 
         return  Pessoa
                 .builder()
                 .id(pessoaConsultadaOptional.map(Pessoa::getId).orElse(null))
-                .fkUni(unidadeEnsinoRepository.findById(52104346l).orElse(null))
+                .fkUni(unidadeEnsinoRepository.findById(52083535l).orElse(null))
                 .identificacaoUnica(stringToLong(conteudoLinha, 3))
                 .cep(valorString(conteudoLinha, 40))
                 .corRaca(getCorRaca(valorString(conteudoLinha, 11)))
-                .cpf(valorString(conteudoLinha, 4))
+                .cpf(getCpf(conteudoLinha, 4))
                 .dataNascimento(stringToDate(conteudoLinha, 6))
                 .localizacaoDiferenciadaResidencia(getLocalizacaoDiferenciadaResidencia(valorString(conteudoLinha, 43)))
                 .localizacaoZonaResidencia(getLocalizacaoZonaResidencia(valorString(conteudoLinha, 42)))
@@ -143,6 +144,15 @@ public class GenericServicePessoaImportacao extends GenericEducacensoImportacao 
                 .enderecoEletronicoEmail("campo93naoesquecer@gmail.com")
                 .build();
 
+    }
+
+    protected String getCpf(String[] conteudo, Integer posicao) {
+        try {
+            var cpf = stringToLong(conteudo, posicao);
+            return Objects.nonNull(cpf) && cpf.toString().length() <= 11 ? cpf.toString() : null;
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     public LocalizacaoZonaResidencia getLocalizacaoZonaResidencia(String conteudo) {

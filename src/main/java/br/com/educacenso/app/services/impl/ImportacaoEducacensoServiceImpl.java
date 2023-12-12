@@ -24,6 +24,7 @@ public class ImportacaoEducacensoServiceImpl implements ImportacaoEducacensoServ
             while ((linha = reader.readLine()) != null) {
                 conteudoLinha = getConteudoLinha(linha);
                 if (conteudoLinha[0].equals(TipoRegistro.REGISTRO_CADASTRO_DOCENTE_IDENTIFICACAO.getDescricao()) ||
+                        conteudoLinha[0].equals(TipoRegistro.REGISTRO_CADASTRO_TURMA.getDescricao()) ||
                         conteudoLinha[0].equals(TipoRegistro.REGISTRO_CADASTRO_ESCOLA_CARACTERIZACAO_INFRAESTRUTURA.getDescricao())) {
                     getTipoImportacaoEducacenso().importarLinhaArquivo(conteudoLinha);
                 }

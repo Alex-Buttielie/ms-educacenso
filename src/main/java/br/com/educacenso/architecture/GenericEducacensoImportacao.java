@@ -89,7 +89,7 @@ public abstract class  GenericEducacensoImportacao {
                     .filter(con -> isConteudoValido(con))
                     .map(cont -> enumParaBusca[Integer.parseInt(cont)])
                     .orElse(null);
-        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+        } catch (NumberFormatException |NullPointerException | ArrayIndexOutOfBoundsException e) {
             return null;
         }
     }
