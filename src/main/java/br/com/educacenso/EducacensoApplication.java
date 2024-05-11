@@ -17,4 +17,7 @@ public class EducacensoApplication extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) { return builder.sources(EducacensoApplication.class); }
 
+
+
+
 }
